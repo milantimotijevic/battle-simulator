@@ -1,0 +1,22 @@
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+# TEMPORARILY COMMENTING OUT
+#.env
+#.env.development
+#.env.production
+#.env.test
+
+# test results
+test-results
+
+# other
+.DS_Store
+.idea
+.vscode
+*.iml
