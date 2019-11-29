@@ -9,23 +9,28 @@ const fetchAllBattlesHandler = async function fetchAllBattlesHandler() {
 	return fetchAllBattles();
 };
 
-const findOneBattleHandler = async function findOneBattleHandler(id) {
+const findOneBattleHandler = async function findOneBattleHandler(request) {
+    const { id } = request.params;
 	return fetchOneBattle(id);
 };
 
-const createBattleHandler = async function createBattleHandler(battleParam) {
+const createBattleHandler = async function createBattleHandler(request) {
+    const battleParam = request.payload;
 	return createBattle(battleParam);
 };
 
-const startBattleHandler = async function startBattleHandler(id) {
+const startBattleHandler = async function startBattleHandler(request) {
+    const { id } = request.params;
 	return startBattle(id);
 };
 
-const resetBattleHandler = async function resetBattleHandler(id) {
+const resetBattleHandler = async function resetBattleHandler(request) {
+    const { id } = request.params;
 	return resetBattle(id);
 };
 
-const getBattleLogHandler = async function getBattleLogHandler(id) {
+const getBattleLogHandler = async function getBattleLogHandler(request) {
+    const { id } = request.params;
 	return getBattleLog(id);
 };
 
