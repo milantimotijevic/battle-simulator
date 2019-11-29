@@ -1,5 +1,7 @@
 
-module.exports = async function startWorkers() {
+module.exports = async function startWorkers(armies) {
 	// TODO check which workers are running and run them if needed
-	console.log('Starting workers...');
+	armies.forEach((army) => {
+		console.log(`Starting worker for army ${army.name} / ${army.id}`);
+	});
 };

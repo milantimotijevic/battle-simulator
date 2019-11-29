@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "eslint": "npx eslint -- ./src/.",
+    "eslint:fix": "npx eslint --fix ./src/.",
     "start": "nodemon ./src/app"
   },
   "author": "Milan Timotijevic",
