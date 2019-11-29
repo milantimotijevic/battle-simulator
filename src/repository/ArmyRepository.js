@@ -13,8 +13,8 @@ const createArmy = function createArmy(armyParam) {
 };
 
 const resetArmies = function resetArmies(armyIds) {
-	// TODO confirm whether $-referencing works
-	return mongoose.models.Army.updateMany({ _id: { $in: [armyIds] } }, { $set: { units: '$startingUnits' } });
+	return mongoose.models.Army.updateMany({ _id: { $in: armyIds } },
+		{ $set: { currentUnits: '$units', defeated: false, reload: 0 } });
 };
 
 module.exports = {

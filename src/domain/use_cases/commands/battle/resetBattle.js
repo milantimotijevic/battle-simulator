@@ -1,12 +1,12 @@
 const BattleRepository = require('../../../../repository/BattleRepository');
 const resetArmies = require('../../commands/army/resetArmies');
 const updateBattle = require('./updateBattle');
+const stopWorkers = require('./../army/startWorkers');
 
 module.exports = async function resetBattle(battleId) {
-	let battle = await BattleRepository.findOne(battleId);
-	// TODO extract armies and reset their unit count
-	// TODO check battle status
-	// TODO ensure these are IDs
+	const battle = await BattleRepository.findOne(battleId);
+	// TODO validate battle
+	await stopWorkers(battle.armies);
 	await resetArmies(battle.armies);
-	battle = await updateBattle(battle.id, { logs: [] });
+	return updateBattle(battle.id, { logs: [], status: 'PENDING' });
 };

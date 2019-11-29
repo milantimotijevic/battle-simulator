@@ -5,6 +5,7 @@ const fetchAll = function fetchAll() {
 };
 
 const findOne = function findOne(id) {
+	// TODO make sure raw obj is returned (with .id prop)
 	return mongoose.models.Battle.findById(id);
 };
 
@@ -18,7 +19,7 @@ const addArmyToBattle = function addArmyToBattle(battle, army) {
 };
 
 const updateBattle = function updateBattle(_id, props) {
-	return mongoose.models.Battle.update({ _id }, { $set: props }, { new: true });
+	return mongoose.models.Battle.updateOne({ _id }, { $set: props }, { new: true });
 };
 
 const getBattleLog = function getBattleLog(id) {
