@@ -37,7 +37,7 @@ const routes = [
 	},
 	{
 		method: 'PUT',
-		path: '/add-army-to-battle/{battleId}/{armyId}',
+		path: '/army/battle/{armyId}/{battleId}',
 		handler: controller.addArmyToBattleHandler,
 		options: {
 			description: 'Add an army into an existing battle',

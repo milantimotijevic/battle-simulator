@@ -8,6 +8,10 @@ const findOne = function findOne(id) {
 	return mongoose.models.Battle.findById(id);
 };
 
+const findOneByArmyId = function findOneByArmyId(armyId) {
+	return mongoose.models.Battle.findOne({ armies: mongoose.Types.ObjectId(armyId) });
+};
+
 const createBattle = function createBattle(battleParam) {
 	return mongoose.models.Battle.create(battleParam);
 };
@@ -30,6 +34,7 @@ const getBattleLog = function getBattleLog(id) {
 module.exports = {
 	fetchAll,
 	findOne,
+	findOneByArmyId,
 	createBattle,
 	pushToArrayProperty,
 	updateBattle,
