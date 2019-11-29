@@ -8,7 +8,12 @@ const findOne = function findOne(_id) {
 	return mongoose.models.Army.find({ _id });
 };
 
+const createArmy = function create(armyParam) {
+	return mongoose.models.Army.insert(armyParam);
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
+	createArmy,
 };

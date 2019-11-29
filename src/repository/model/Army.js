@@ -4,4 +4,4 @@ const schema = new mongoose.Schema({
 	name: 'String',
 });
 
-mongoose.model('Army', schema);
+mongoose.model('Army', schema, 'armies');
