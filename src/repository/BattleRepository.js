@@ -16,8 +16,8 @@ const addArmyToBattle = function addArmyToBattle(battle, army) {
 	return mongoose.models.Battle.update({ _id: battle.id }, { $push: { armies: army.id } });
 };
 
-const startBattle = function startBattle(battle) {
-	return mongoose.models.Battle.update({ _id: battle.id }, { $set: { status: 'ONGOING' } });
+const updateBattleStatus = function updateBattleStatus(_id, status) {
+	return mongoose.models.Battle.update({ _id }, { $set: { status } });
 };
 
 const resetBattle = function resetBattle(battle) {
@@ -35,7 +35,7 @@ module.exports = {
 	findOne,
 	createBattle,
 	addArmyToBattle,
-	startBattle,
+	updateBattleStatus,
 	resetBattle,
 	getBattleLog,
 };

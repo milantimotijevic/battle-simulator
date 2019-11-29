@@ -4,5 +4,5 @@ module.exports = async function startBattle(id) {
 	// TODO initiate workers
 	// TODO check battle status
 	const battle = await BattleRepository.findOne(id);
-	return BattleRepository.startBattle(battle);
+	return BattleRepository.updateBattleStatus(battle.id, 'ONGOING');
 };
