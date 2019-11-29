@@ -6,4 +6,8 @@ const schema = new mongoose.Schema({
 	armies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Army' }],
 });
 
+schema.set('toJSON', {
+	virtuals: true,
+});
+
 mongoose.model('Battle', schema, 'battles');

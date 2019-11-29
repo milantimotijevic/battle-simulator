@@ -8,4 +8,8 @@ const schema = new mongoose.Schema({
 	reload: 'Number',
 });
 
+schema.set('toJSON', {
+	virtuals: true,
+});
+
 mongoose.model('Army', schema, 'armies');

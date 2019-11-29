@@ -5,7 +5,7 @@ const fetchAll = function fetchAll() {
 };
 
 const findOne = function findOne(id) {
-	// TODO make sure raw obj is returned (with .id prop)
+	// TODO consider calling .toJSON()
 	return mongoose.models.Battle.findById(id);
 };
 
@@ -16,6 +16,11 @@ const createBattle = function createBattle(battleParam) {
 const addArmyToBattle = function addArmyToBattle(battle, army) {
 	// TODO consider a way to work this one into updateBattle (low priority)
 	return mongoose.models.Battle.updateOne({ _id: battle.id }, { $push: { armies: army.id } }, { new: true });
+};
+
+const pushToArrayProperty = function pushToArrayProperty(battle, arrayName, item) {
+	// TODO consider a way to work this one into updateBattle (low priority)
+	return mongoose.models.Battle.updateOne({ _id: battle.id }, { $push: { [arrayName]: item } }, { new: true });
 };
 
 const updateBattle = function updateBattle(_id, props) {
@@ -33,6 +38,7 @@ module.exports = {
 	findOne,
 	createBattle,
 	addArmyToBattle,
+	pushToArrayProperty,
 	updateBattle,
 	getBattleLog,
 };
