@@ -23,7 +23,7 @@ const updateBattle = function updateBattle(_id, props) {
 
 const getBattleLog = function getBattleLog(id) {
 	// TODO confirm projection syntax
-	// TODO consider using existing method (findOne) with parametrized (query) projections
+	// TODO use exclusive property (projection)
 	return mongoose.models.Battle.findById(id, { log: 1 });
 };
 

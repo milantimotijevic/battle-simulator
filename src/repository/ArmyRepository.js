@@ -9,7 +9,7 @@ const findOne = function findOne(id) {
 };
 
 const createArmy = function createArmy(armyParam) {
-	return mongoose.models.Army.insert(armyParam);
+	return mongoose.models.Army.create(armyParam);
 };
 
 const updateArmy = function updateArmy(_id, params) {
