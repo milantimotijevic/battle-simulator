@@ -7,5 +7,5 @@ module.exports = async function addArmyToBattle(battleId, armyId) {
 	const army = await ArmyRepository.findOne(armyId);
 	// TODO check army status, etc.
 
-	return BattleRepository.pushToArrayProperty(battle, 'armies', army.id);
+	return BattleRepository.pushToArrayProperty(battle.id, 'armies', army.id);
 };
