@@ -13,11 +13,6 @@ const createBattle = function createBattle(battleParam) {
 	return mongoose.models.Battle.create(battleParam);
 };
 
-const addArmyToBattle = function addArmyToBattle(battle, army) {
-	// TODO consider a way to work this one into updateBattle (low priority)
-	return mongoose.models.Battle.updateOne({ _id: battle.id }, { $push: { armies: army.id } }, { new: true });
-};
-
 const pushToArrayProperty = function pushToArrayProperty(battle, arrayName, item) {
 	// TODO consider a way to work this one into updateBattle (low priority)
 	return mongoose.models.Battle.updateOne({ _id: battle.id }, { $push: { [arrayName]: item } }, { new: true });
@@ -37,7 +32,6 @@ module.exports = {
 	fetchAll,
 	findOne,
 	createBattle,
-	addArmyToBattle,
 	pushToArrayProperty,
 	updateBattle,
 	getBattleLog,

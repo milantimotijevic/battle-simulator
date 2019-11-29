@@ -12,14 +12,18 @@ const createArmy = function createArmy(armyParam) {
 	return mongoose.models.Army.insert(armyParam);
 };
 
-const resetArmies = function resetArmies(armyIds) {
-	return mongoose.models.Army.updateMany({ _id: { $in: armyIds } },
-		{ $set: { currentUnits: '$units', defeated: false, reload: 0 } });
+const updateArmy = function updateArmy(_id, params) {
+	return mongoose.models.Army.updateOne({ _id }, { $set: params });
+};
+
+const updateMultipleArmies = function updateMultipleArmies(ids, params) {
+	return mongoose.models.Army.updateMany({ _id: { $in: ids } }, { $set: params });
 };
 
 module.exports = {
 	fetchAll,
 	findOne,
 	createArmy,
-	resetArmies,
+	updateArmy,
+	updateMultipleArmies,
 };
