@@ -1,7 +1,9 @@
 const fetchAllBattles = require('../../../domain/use_cases/queries/battle/fetchAllBattles');
 const fetchOneBattle = require('../../../domain/use_cases/queries/battle/findOneBattle');
+const createBattle = require('../../../domain/use_cases/commands/battle/createBattle');
 const startBattle = require('../../../domain/use_cases/commands/battle/startBattle');
 const resetBattle = require('../../../domain/use_cases/commands/battle/resetBattle');
+const getBattleLog = require('../../../domain/use_cases/queries/battle/getBattleLog');
 
 const fetchAllBattlesHandler = async function fetchAllBattlesHandler() {
 	return fetchAllBattles();
@@ -9,6 +11,10 @@ const fetchAllBattlesHandler = async function fetchAllBattlesHandler() {
 
 const findOneBattleHandler = async function findOneBattleHandler(id) {
 	return fetchOneBattle(id);
+};
+
+const createBattleHandler = async function createBattleHandler(battleParam) {
+	return createBattle(battleParam);
 };
 
 const startBattleHandler = async function startBattleHandler(id) {
@@ -19,10 +25,15 @@ const resetBattleHandler = async function resetBattleHandler(id) {
 	return resetBattle(id);
 };
 
+const getBattleLogHandler = async function getBattleLogHandler(id) {
+	return getBattleLog(id);
+};
+
 module.exports = {
 	fetchAllBattlesHandler,
 	findOneBattleHandler,
+	createBattleHandler,
 	startBattleHandler,
 	resetBattleHandler,
-
+	getBattleLogHandler,
 };
