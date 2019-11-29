@@ -1,19 +1,24 @@
 const mongoose = require('mongoose');
 
 const fetchAll = function fetchAll() {
-    return mongoose.models.Battle.find({});
+	return mongoose.models.Battle.find({});
 };
 
 const findOne = function findOne(_id) {
-    return mongoose.models.Battle.find({ _id });
+	return mongoose.models.Battle.find({ _id });
 };
 
-const createArmy = function create(battleParam) {
-    return mongoose.models.Battle.insert(battleParam);
+const createBattle = function createBattle(battleParam) {
+	return mongoose.models.Battle.insert(battleParam);
+};
+
+const addArmyToBattle = function addArmyToBattle(battle, army) {
+	return mongoose.models.Battle.update({ _id: battle.id }, { $push: { armies: army.id } });
 };
 
 module.exports = {
-    fetchAll,
-    findOne,
-    createArmy,
+	fetchAll,
+	findOne,
+	createBattle,
+	addArmyToBattle,
 };

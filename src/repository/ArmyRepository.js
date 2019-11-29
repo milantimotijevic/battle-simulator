@@ -8,7 +8,7 @@ const findOne = function findOne(_id) {
 	return mongoose.models.Army.find({ _id });
 };
 
-const createArmy = function create(armyParam) {
+const createArmy = function createArmy(armyParam) {
 	return mongoose.models.Army.insert(armyParam);
 };
 
