@@ -13,20 +13,17 @@ const createBattle = function createBattle(battleParam) {
 };
 
 const addArmyToBattle = function addArmyToBattle(battle, army) {
-	return mongoose.models.Battle.update({ _id: battle.id }, { $push: { armies: army.id } });
+	// TODO consider a way to work this one into updateBattle (low priority)
+	return mongoose.models.Battle.updateOne({ _id: battle.id }, { $push: { armies: army.id } }, { new: true });
 };
 
-const updateBattleStatus = function updateBattleStatus(_id, status) {
-	return mongoose.models.Battle.update({ _id }, { $set: { status } });
-};
-
-const resetBattle = function resetBattle(battle) {
-	// TODO consider having a collection with all the actions, so they can be easily reverted
-	return mongoose.models.Battle.update({ _id: battle.id }, { $set: { log: [] } });
+const updateBattle = function updateBattle(_id, props) {
+	return mongoose.models.Battle.update({ _id }, { $set: props }, { new: true });
 };
 
 const getBattleLog = function getBattleLog(id) {
 	// TODO confirm projection syntax
+	// TODO consider using existing method (findOne) with parametrized (query) projections
 	return mongoose.models.Battle.findById(id, { log: 1 });
 };
 
@@ -35,7 +32,6 @@ module.exports = {
 	findOne,
 	createBattle,
 	addArmyToBattle,
-	updateBattleStatus,
-	resetBattle,
+	updateBattle,
 	getBattleLog,
 };

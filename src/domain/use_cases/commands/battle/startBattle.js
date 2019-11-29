@@ -1,8 +1,7 @@
-const BattleRepository = require('../../../../repository/BattleRepository');
+const updateBattle = require('./updateBattle');
 
-module.exports = async function startBattle(id) {
-	// TODO initiate workers
+module.exports = async function startBattle(battle) {
 	// TODO check battle status
-	const battle = await BattleRepository.findOne(id);
-	return BattleRepository.updateBattleStatus(battle.id, 'ONGOING');
+	// TODO start workers and update battle status if needed
+	return updateBattle(battle.id, { status: 'ONGOING' });
 };
