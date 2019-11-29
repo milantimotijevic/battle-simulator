@@ -10,27 +10,27 @@ const fetchAllBattlesHandler = async function fetchAllBattlesHandler() {
 };
 
 const findOneBattleHandler = async function findOneBattleHandler(request) {
-    const { id } = request.params;
+	const { id } = request.params;
 	return fetchOneBattle(id);
 };
 
 const createBattleHandler = async function createBattleHandler(request) {
-    const battleParam = request.payload;
+	const battleParam = request.payload;
 	return createBattle(battleParam);
 };
 
 const startBattleHandler = async function startBattleHandler(request) {
-    const { id } = request.params;
+	const { id } = request.params;
 	return startBattle(id);
 };
 
 const resetBattleHandler = async function resetBattleHandler(request) {
-    const { id } = request.params;
+	const { id } = request.params;
 	return resetBattle(id);
 };
 
 const getBattleLogHandler = async function getBattleLogHandler(request) {
-    const { id } = request.params;
+	const { id } = request.params;
 	return getBattleLog(id);
 };
 
