@@ -12,8 +12,14 @@ const createArmy = function createArmy(armyParam) {
 	return mongoose.models.Army.insert(armyParam);
 };
 
+const resetArmies = function resetArmies(armyIds) {
+	// TODO confirm whether $-referencing works
+	return mongoose.models.Army.updateMany({ _id: { $in: [armyIds] } }, { $set: { units: '$startingUnits' } });
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
 	createArmy,
+	resetArmies,
 };
