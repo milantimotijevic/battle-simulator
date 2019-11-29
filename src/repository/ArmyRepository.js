@@ -4,8 +4,8 @@ const fetchAll = function fetchAll() {
 	return mongoose.models.Army.find({});
 };
 
-const findOne = function findOne(_id) {
-	return mongoose.models.Army.find({ _id });
+const findOne = function findOne(id) {
+	return mongoose.models.Army.findById(id);
 };
 
 const createArmy = function createArmy(armyParam) {

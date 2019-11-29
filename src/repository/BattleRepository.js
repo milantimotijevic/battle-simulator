@@ -4,8 +4,8 @@ const fetchAll = function fetchAll() {
 	return mongoose.models.Battle.find({});
 };
 
-const findOne = function findOne(_id) {
-	return mongoose.models.Battle.find({ _id });
+const findOne = function findOne(id) {
+	return mongoose.models.Battle.findById(id);
 };
 
 const createBattle = function createBattle(battleParam) {
@@ -25,6 +25,11 @@ const resetBattle = function resetBattle(battle) {
 	return mongoose.models.Battle.update({ _id: battle.id }, { $set: { log: [] } });
 };
 
+const getBattleLog = function getBattleLog(id) {
+	// TODO confirm projection syntax
+	return mongoose.models.Battle.findById(id, { log: 1 });
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
@@ -32,4 +37,5 @@ module.exports = {
 	addArmyToBattle,
 	startBattle,
 	resetBattle,
+	getBattleLog,
 };
