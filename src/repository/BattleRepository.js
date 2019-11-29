@@ -16,9 +16,21 @@ const addArmyToBattle = function addArmyToBattle(battle, army) {
 	return mongoose.models.Battle.update({ _id: battle.id }, { $push: { armies: army.id } });
 };
 
+const startBattle = function startBattle(battle) {
+	return mongoose.models.Battle.update({ _id: battle.id }, { $set: { status: 'ONGOING' } });
+};
+
+const resetBattle = function resetBattle(battle) {
+	// TODO consider having a collection with all the actions, so they can be easily reverted
+	// TODO ensure this command affects the armies (e.g. rolls them back to starting values)
+	return mongoose.models.Battle.update({ _id: battle.id }, { $set: { log: [] } });
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
 	createBattle,
 	addArmyToBattle,
+	startBattle,
+	resetBattle,
 };
