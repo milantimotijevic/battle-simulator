@@ -1,8 +1,8 @@
 const Boom = require('@hapi/boom');
-const ArmyRepository = require('../../../../repository/ArmyRepository');
 const updateBattle = require('./updateBattle');
 const stopWorkers = require('./../army/stopWorkers');
 const findOneBattle = require('../../queries/battle/findOneBattle');
+const updateArmy = require('../army/updateArmy');
 
 /**
  * Resets an ONGOING battle by
@@ -20,7 +20,15 @@ module.exports = async function resetBattle(battleId) {
 		throw Boom.badRequest(`Battle is in status ${battle.status}. Only ONGOING battles can be reset`);
 	}
 	await stopWorkers(battle.armies);
-	await ArmyRepository
-		.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
+
+	/**
+     * Apparently, self-referencing is not possible in mongoose's updateMany method
+	 * Idea for improvement: find a better way to reset armies, one that does not include looping over them
+     */
+	// await ArmyRepository
+	// 	.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
+	battle.armies.forEach(async (army) => {
+		await updateArmy(army.id, { currentUnits: army.units, defeated: false, reload: 0 });
+	});
 	return updateBattle(battle.id, { logs: [], status: 'PENDING' });
 };

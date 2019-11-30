@@ -17,7 +17,8 @@ const updateArmy = function updateArmy(_id, params) {
 };
 
 const updateMultipleArmies = function updateMultipleArmies(ids, params) {
-	return mongoose.models.Army.updateMany({ _id: { $in: ids } }, { $set: params });
+	return mongoose.models.Army
+		.updateMany({ _id: { $in: ids } }, { $set: params }, { useFindAndModify: false });
 };
 
 module.exports = {

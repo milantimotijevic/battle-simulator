@@ -16,6 +16,11 @@ const createBattle = function createBattle(battleParam) {
 	return mongoose.models.Battle.create(battleParam);
 };
 
+/**
+ * Pushes an item into a battle's Array-type property
+ * This is useful for adding an army or updating the battle's log
+ * It also returns the updated object
+ */
 const pushToArrayProperty = function pushToArrayProperty(_id, arrayName, item) {
 	return mongoose.models.Battle.updateOne({ _id }, { $push: { [arrayName]: item } }, { new: true });
 };
