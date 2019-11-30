@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const fetchAll = function fetchAll() {
-	return mongoose.models.Battle.find({});
+	return mongoose.models.Battle.find({}).populate('armies');
 };
 
 const findOne = function findOne(id) {
-	return mongoose.models.Battle.findById(id);
+	return mongoose.models.Battle.findById(id).populate('armies');
 };
 
 const findOneByArmyId = function findOneByArmyId(armyId) {
@@ -17,7 +17,6 @@ const createBattle = function createBattle(battleParam) {
 };
 
 const pushToArrayProperty = function pushToArrayProperty(_id, arrayName, item) {
-	// TODO consider a way to work this one into updateBattle (low priority)
 	return mongoose.models.Battle.updateOne({ _id }, { $push: { [arrayName]: item } }, { new: true });
 };
 
