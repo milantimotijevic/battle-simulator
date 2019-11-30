@@ -2,10 +2,10 @@ const Boom = require('@hapi/boom');
 const BattleRepository = require('../../../../repository/BattleRepository');
 
 module.exports = async function getBattleLog(id) {
-	const battleLog = BattleRepository.getBattleLog(id);
+	const battle = BattleRepository.getBattleLog(id);
 
-	if (!battleLog) {
+	if (!battle) {
 		throw Boom.notFound(`Battle with ID ${id} not found`);
 	}
-	return battleLog;
+	return battle.log ? battle.log : [];
 };

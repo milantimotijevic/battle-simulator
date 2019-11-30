@@ -20,8 +20,9 @@ const pushToArrayProperty = function pushToArrayProperty(_id, arrayName, item) {
 	return mongoose.models.Battle.updateOne({ _id }, { $push: { [arrayName]: item } }, { new: true });
 };
 
-const updateBattle = function updateBattle(_id, props) {
-	return mongoose.models.Battle.updateOne({ _id }, { $set: props }, { new: true });
+const updateBattle = function updateBattle(id, props) {
+	return mongoose.models.Battle
+		.findByIdAndUpdate(id, { $set: props }, { new: true }).populate('armies');
 };
 
 /**
