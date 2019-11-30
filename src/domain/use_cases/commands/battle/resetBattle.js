@@ -1,10 +1,11 @@
-const BattleRepository = require('../../../../repository/BattleRepository');
+const Boom = require('@hapi/boom');
 const ArmyRepository = require('../../../../repository/ArmyRepository');
 const updateBattle = require('./updateBattle');
 const stopWorkers = require('./../army/startWorkers');
+const findOneBattle = require('../../queries/battle/findOneBattle');
 
 module.exports = async function resetBattle(battleId) {
-	const battle = await BattleRepository.findOne(battleId);
+	const battle = await findOneBattle(battleId);
 	// TODO validate battle
 	await stopWorkers(battle.armies);
 	await ArmyRepository

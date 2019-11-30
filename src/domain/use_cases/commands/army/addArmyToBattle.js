@@ -1,10 +1,11 @@
 const Boom = require('@hapi/boom');
 const ArmyRepository = require('../../../../repository/ArmyRepository');
 const BattleRepository = require('../../../../repository/BattleRepository');
+const findOneBattle = require('../../queries/battle/findOneBattle');
 
 
 module.exports = async function addArmyToBattle(battleId, armyId) {
-	const battle = await BattleRepository.findOne(battleId);
+	const battle = await findOneBattle(battleId);
 	if (battle.status !== 'PENDING') {
 		throw Boom.badRequest('Cannot add to an ongoing/resolved battle');
 	}
