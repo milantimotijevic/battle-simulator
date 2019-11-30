@@ -1,7 +1,7 @@
 const fetchAllArmies = require('../../../domain/use_cases/queries/army/fetchAllArmies');
 const findOneArmy = require('../../../domain/use_cases/queries/army/findOneArmy');
 const createArmy = require('../../../domain/use_cases/commands/army/createArmy');
-const addArmyToBattle = require('../../../domain/use_cases/commands/army/addArmyToBattle');
+const addArmyToBattle = require('../../../domain/use_cases/commands/battle/addArmyToBattle');
 
 
 const fetchAllArmiesHandler = async function fetchAllArmiesHandler() {

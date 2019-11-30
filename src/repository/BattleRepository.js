@@ -30,15 +30,17 @@ const updateBattle = function updateBattle(id, props) {
 		.findByIdAndUpdate(id, { $set: props }, { new: true }).populate('armies');
 };
 
+const getBattleLog = async function getBattleLog(id) {
+	const battle = await mongoose.models.Battle.findById(id, { log: 1 });
+	return battle.log;
+};
+
 /**
- * Fetches a single battle's log
- * The reason why this wasn't rolled in the above findOne method was because said method uses population (for armies),
- * which nullifies projection
- * If the application ends up needing projections for properties other than the log, this method should be changed to
- * 'getOneWithProjection' with parametrized projection param and no population
+ * Fetches armies associated with a specific battle
  */
-const getBattleLog = function getBattleLog(id) {
-	return mongoose.models.Battle.findById(id, { log: 1 });
+const getBattleParticipants = async function getBattleParticipants(id) {
+	const battle = await mongoose.models.Battle.findById(id, { armies: 1 }).populate('armies');
+	return battle.armies;
 };
 
 module.exports = {
@@ -49,4 +51,5 @@ module.exports = {
 	pushToArrayProperty,
 	updateBattle,
 	getBattleLog,
+	getBattleParticipants
 };
