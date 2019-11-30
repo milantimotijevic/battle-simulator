@@ -6,7 +6,6 @@ const armyIdParam = {
 
 const newArmySchema = {
 	name: Joi.string().required(),
-	// TODO add error message for int out of bounds
 	units: Joi.number().integer().min(80).max(100)
 		.required(),
 	strategy: Joi.string().valid('RANDOM', 'WEAKEST', 'STRONGEST').required(),
