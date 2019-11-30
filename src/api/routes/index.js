@@ -1,3 +1,3 @@
-const { collectToArray } = require('../../lib/module-collector');
+const { collectToArray } = require('../../util/module-collector');
 
 module.exports = collectToArray(__filename, __dirname);
