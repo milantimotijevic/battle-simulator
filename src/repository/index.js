@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+/**
+ * Initiates connection with MongoDB and immediately loads models
+ * Other modules will have easy access to the DB via requiring 'mongoose'
+ */
 mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,

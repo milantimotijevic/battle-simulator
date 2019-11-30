@@ -3,7 +3,10 @@ const ArmyRepository = require('../../../../repository/ArmyRepository');
 const BattleRepository = require('../../../../repository/BattleRepository');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 
-
+/**
+ * Adds an existing army to a PENDING battle
+ * An army may only ever participate in a single battle
+ */
 module.exports = async function addArmyToBattle(battleId, armyId) {
 	const battle = await findOneBattle(battleId);
 	if (battle.status !== 'PENDING') {

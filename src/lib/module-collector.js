@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Dynamically imports modules from the folder in which it was called
+ * This action is considered a blocking one, however, it is only invoked once or twice upon deployment
+ * The purpose of it is to lower the margin for error when importing from multiple files (e.g. routes and models)
+ */
 const collectToArray = (filename, dirname) => {
 	const basename = path.basename(filename);
 
