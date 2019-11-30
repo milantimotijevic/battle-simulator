@@ -19,5 +19,5 @@ module.exports = async function addArmyToBattle(battleId, armyId) {
 		throw Boom.badRequest(`Army is already in battle ${existingBattle.name} / ${existingBattle.id}`);
 	}
 
-	return BattleRepository.pushToArrayProperty(battle.id, 'armies', army.id);
+	await BattleRepository.pushToArrayProperty(battle.id, 'armies', army.id);
 };

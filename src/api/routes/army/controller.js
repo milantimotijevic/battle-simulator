@@ -18,9 +18,11 @@ const createArmyHandler = async function createArmyHandler(request) {
 	return createArmy(armyParam);
 };
 
-const addArmyToBattleHandler = async function addArmyToBattleHandler(request) {
+const addArmyToBattleHandler = async function addArmyToBattleHandler(request, h) {
 	const { battleId, armyId } = request.params;
-	return addArmyToBattle(battleId, armyId);
+	await addArmyToBattle(battleId, armyId);
+
+	return h.response().code(204);
 };
 
 module.exports = {
