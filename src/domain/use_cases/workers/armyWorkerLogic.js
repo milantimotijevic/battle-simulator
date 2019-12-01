@@ -6,7 +6,7 @@ const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 let announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
-
+const terminateWorkerByArmyId = require('./index');
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
@@ -18,22 +18,6 @@ const { battle } = workerData;
 announce = announce.bind(this, battle);
 
 let opponents;
-
-/**
- * Public methods available for calling from main thread
- */
-const commands = {};
-
-/**
- * Issues a publicly available command based on msg from main thread
- */
-parentPort.on('message', (message) => {
-	try {
-		commands[message.commandName](message.commandParams);
-	} catch (err) {
-		console.log(`(Worker Thread) Failed to perform command ${message.commandName} for ${thisArmy.name}`);
-	}
-});
 
 /**
  * Gets latest army data from DB
@@ -62,6 +46,33 @@ const reloadIfNeeded = async function reloadIfNeeded() {
 };
 
 /**
+ * Instructs the army to check its status, reload if needed and initiate the attack sequence
+ */
+const takeTurn = async function takeTurn() {
+	await getLatestData();
+	if (thisArmy.defeated) {
+		terminateWorkerByArmyId(thisArmy.id);
+		return;
+	}
+
+	await reloadIfNeeded();
+
+	// Checking again because the army might have been defeated while reloading
+	await getLatestData();
+	if (thisArmy.defeated) {
+		terminateWorkerByArmyId(thisArmy.id);
+		return;
+	}
+
+	// eslint-disable-next-line no-use-before-define
+	await attemptToAttack();
+};
+
+parentPort.on('message', () => {
+	takeTurn();
+});
+
+/**
  * Instructs the army to select a target and attempt to perform an attack
  */
 const attemptToAttack = async function attemptToAttack() {
@@ -79,27 +90,5 @@ const attemptToAttack = async function attemptToAttack() {
 	const reload = helpers.calculateReload(thisArmy.currentUnits);
 	await updateArmy(thisArmy.id, { reload });
 
-	await commands.takeTurn();
-};
-
-/**
- * Instructs the army to check its status, reload if needed and initiate the attack sequence
- */
-commands.takeTurn = async function takeTurn() {
-	await getLatestData();
-	if (thisArmy.defeated) {
-		// TODO kill the worker
-		return;
-	}
-
-	await reloadIfNeeded();
-
-	// Checking again because the army might have been defeated while reloading
-	await getLatestData();
-	if (thisArmy.defeated) {
-		// TODO kill the worker
-		return;
-	}
-
-	await attemptToAttack();
+	await takeTurn();
 };
