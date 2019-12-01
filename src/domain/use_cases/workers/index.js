@@ -15,18 +15,19 @@ function findWorkerByArmyId(armyId) {
 }
 
 /**
- * Kills a worker and removes it from the array
+ * Disposes of the worker
  */
 const terminateWorkerByArmyId = function terminateWorkerByArmyId(armyId) {
 	const worker = findWorkerByArmyId(armyId);
 	armyWorkersStorage = armyWorkersStorage.filter(item => item === worker);
+	worker.kill();
 };
 
 /**
  * Creates and runs workers, while also providing methods for killing workers whose armies have been defeated
  * This method expects to receive a battle with undefeated-only armies, however, it will confirm army's status as well
  */
-const createAndRunWorkers = async function createWorkers(battle) {
+const createAndRunWorkers = function createWorkers(battle) {
 	battle.armies.forEach((army) => {
 		const worker = new Worker('./worker.js', { workerData: { thisArmy: army, battle } });
 
