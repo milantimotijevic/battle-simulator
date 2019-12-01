@@ -1,42 +1,35 @@
 const { Worker } = require('worker_threads');
 
-const battle = {
-	id: 1,
-	name: 'A nasty one',
-	armies: [
-		{
-			id: 1,
-			name: 'Rohan',
-			currentUnits: 5000,
-		},
-		{
-			id: 2,
-			name: 'Gondor',
-			currentUnits: 4000,
-		},
-		{
-			id: 3,
-			name: 'Isengard',
-			currentUnits: 10000,
-		},
-	],
-};
-
-const armyWorkersStorage = [];
-for (let i = 0; i < battle.armies.length; i++) {
-	const worker = new Worker('./worker.js', { workerData: { thisArmy: battle.armies[i], battle } });
-	// worker.on('message', message => {
-	//    console.log(message);
-	// });
-	armyWorkersStorage.push(worker);
-}
+let armyWorkersStorage = [];
 
 for (let i = 0; i < armyWorkersStorage.length; i++) {
 	armyWorkersStorage[i].postMessage({ commandName: 'takeTurn', commandParams: armies });
 }
 
 const createWorkers = async function createWorkers(battle) {
+	battle.armies.forEach((army) => {
+		const worker = new Worker('./worker.js', { workerData: { thisArmy: army, battle } });
+		// worker.on('message', message => {
+		//    console.log(message);
+		// });
+		armyWorkersStorage.push({ worker, armyId: army.id });
+	});
 
+	armyWorkersStorage.forEach((armyWorker) => {
+		armyWorker.postMessage({ commandName: 'takeTurn' });
+	});
+};
+
+const findWorkerByArmyId = function findWorkerByArmyId(armyId) {
+	return armyWorkersStorage.find(worker => worker.armyId === armyId);
+};
+
+/**
+ * Kills a worker and removes it from the array
+ */
+const terminateWorkerByArmyId = function terminateWorkerByArmyId(armyId) {
+	const worker = findWorkerByArmyId(armyId);
+	armyWorkersStorage = armyWorkersStorage.filter(item => item === worker);
 };
 
 module.exports = {
