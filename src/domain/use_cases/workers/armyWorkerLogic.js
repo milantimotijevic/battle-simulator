@@ -37,7 +37,6 @@ parentPort.on('message', (message) => {
 
 /**
  * Gets latest army data from DB
- * TODO handle defeat-checking better
  */
 const getLatestData = async function getLatestData() {
 	thisArmy = await findOneArmy(thisArmy.id);
