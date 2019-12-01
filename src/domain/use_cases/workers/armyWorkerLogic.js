@@ -2,6 +2,7 @@ const { parentPort, workerData } = require('worker_threads');
 const helpers = require('./helpers');
 const fetchAllArmies = require('../queries/army/fetchAllArmies');
 const findOneArmy = require('../queries/army/findOneArmy');
+const updateArmy = require('../commands/army/updateArmy');
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
@@ -28,15 +29,16 @@ parentPort.on('message', (message) => {
 
 /**
  * Gets latest army data from DB
- * TODO handle defeat checking better
+ * TODO handle defeat-checking better
  */
 const getLatestData = async function getLatestData() {
 	thisArmy = await findOneArmy(thisArmy.id);
 	if (thisArmy.defeated) {
 		return;
 	}
-	opponents = await fetchAllArmies({ filters: { defeated: false }, excludeId: thisArmy.id });
-	opponents = [];
+	opponents = await fetchAllArmies(
+		{ filters: { defeated: false, battle: battleId }, excludeId: thisArmy.id }
+	);
 };
 
 /**
@@ -49,7 +51,7 @@ const reloadIfNeeded = async function reloadIfNeeded() {
 	}
 };
 
-commands.takeTurn = async function takeTurn(armies) {
+commands.takeTurn = async function takeTurn() {
 	await getLatestData();
 	if (thisArmy.defeated) {
 		return;
@@ -63,10 +65,10 @@ commands.takeTurn = async function takeTurn(armies) {
 		return;
 	}
 
-	const target = helpers.selectTarget(armies);
+	const target = helpers.selectTarget(thisArmy.strategy, opponents);
 	let msg = `${thisArmy.name} targets ${target.name}`;
 
-	if (helpers.isSuccessfulHit()) {
+	if (helpers.isSuccessfulHit(thisArmy.units)) {
 		const damage = helpers.calculateDamage();
 		console.log(`NOTE: --- Registering ${damage} damage to ${target.name} in DB...`);
 		msg += ` and lands a successful hit, dealing ${damage} damage!`;
@@ -75,6 +77,8 @@ commands.takeTurn = async function takeTurn(armies) {
 	}
 
 	console.log(msg);
-	// remember to set reload
-	// remember to call takeTurn again
+	const reload = helpers.calculateReload(thisArmy.currentUnits);
+	await updateArmy(thisArmy.id, { reload });
+
+	this.takeTurn();
 };
