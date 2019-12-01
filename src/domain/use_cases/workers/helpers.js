@@ -3,19 +3,17 @@ const selectTarget = function selectTarget(strategy, opponents) {
 	return opponents[opponents.length - 1];
 };
 
-const isSuccessfulHit = function isSuccessfulHit() {
-	// TODO logic
-	return true;
+const isSuccessfulHit = function isSuccessfulHit(currentUnits) {
+	const roll = Math.floor(Math.random() * Math.floor(99));
+	return roll <= currentUnits;
 };
 
-const calculateDamage = function calculateDamage() {
-	// TODO logic
-	return 5;
+const calculateDamage = function calculateDamage(currentUnits) {
+	return Math.floor(currentUnits * 0.5);
 };
 
 const calculateReload = function calculateReload(currentUnits) {
-	// TODO logic
-	return 1;
+	return 0.01 * currentUnits;
 };
 
 const getMilliseconds = function getMilliseconds(num) {

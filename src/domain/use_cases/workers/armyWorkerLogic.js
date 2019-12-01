@@ -83,7 +83,7 @@ commands.takeTurn = async function takeTurn() {
 	const target = helpers.selectTarget(thisArmy.strategy, opponents);
 	announce(`${format(thisArmy)} targets ${format(target)}`);
 
-	if (helpers.isSuccessfulHit(thisArmy.units)) {
+	if (helpers.isSuccessfulHit(thisArmy.currentUnits)) {
 		const damage = helpers.calculateDamage();
 		announce(`${format(thisArmy)} lands a successful hit on ${format(target)} for ${damage} damage`);
 		registerDamage(battle, target, damage);
