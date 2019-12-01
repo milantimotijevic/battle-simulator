@@ -5,7 +5,7 @@ const findOneArmy = require('../queries/army/findOneArmy');
 const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 let announce = require('../commands/battle/announce');
-const format = require('../../../util/message-formatter');
+const { format } = require('./helpers');
 
 
 /**
