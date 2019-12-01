@@ -62,23 +62,9 @@ const reloadIfNeeded = async function reloadIfNeeded() {
 };
 
 /**
- * Instructs the army to check its status and reload/attack if needed
- * TODO clean this up, it's getting bloated
+ * Instructs the army to select a target and attempt to perform an attack
  */
-commands.takeTurn = async function takeTurn() {
-	await getLatestData();
-	if (thisArmy.defeated) {
-		return;
-	}
-
-	await reloadIfNeeded();
-
-	// Checking again because the army might have been defeated while reloading
-	await getLatestData();
-	if (thisArmy.defeated) {
-		return;
-	}
-
+const attemptToAttack = async function attemptToAttack() {
 	const target = helpers.selectTarget(thisArmy.strategy, opponents);
 	announce(`${format(thisArmy)} targets ${format(target)}`);
 
@@ -93,5 +79,27 @@ commands.takeTurn = async function takeTurn() {
 	const reload = helpers.calculateReload(thisArmy.currentUnits);
 	await updateArmy(thisArmy.id, { reload });
 
-	this.takeTurn();
+	await commands.takeTurn();
+};
+
+/**
+ * Instructs the army to check its status, reload if needed and initiate the attack sequence
+ */
+commands.takeTurn = async function takeTurn() {
+	await getLatestData();
+	if (thisArmy.defeated) {
+		// TODO kill the worker
+		return;
+	}
+
+	await reloadIfNeeded();
+
+	// Checking again because the army might have been defeated while reloading
+	await getLatestData();
+	if (thisArmy.defeated) {
+		// TODO kill the worker
+		return;
+	}
+
+	await attemptToAttack();
 };
