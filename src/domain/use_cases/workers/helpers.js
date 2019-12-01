@@ -4,7 +4,7 @@ const selectTarget = function selectTarget(strategy, opponents) {
 };
 
 const isSuccessfulHit = function isSuccessfulHit(currentUnits) {
-	const roll = Math.floor(Math.random() * Math.floor(99));
+	const roll = Math.floor(Math.random() * 100) + 1;
 	return roll <= currentUnits;
 };
 
