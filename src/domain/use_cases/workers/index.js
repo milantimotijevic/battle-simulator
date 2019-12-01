@@ -1,4 +1,4 @@
-const { Worker, parentPort } = require('worker_threads');
+const { Worker } = require('worker_threads');
 
 const battle = {
 	id: 1,
@@ -22,19 +22,23 @@ const battle = {
 	],
 };
 
-
 const armyWorkersStorage = [];
-
-const workers = [];
-for (let i = 0; i < armies.length; i++) {
-	const worker =
-		new Worker('./worker.js', { workerData: {thisArmy: armies[i], battle} });
+for (let i = 0; i < battle.armies.length; i++) {
+	const worker = new Worker('./worker.js', { workerData: { thisArmy: battle.armies[i], battle } });
 	// worker.on('message', message => {
 	//    console.log(message);
 	// });
-	workers.push(worker);
+	armyWorkersStorage.push(worker);
 }
 
-for (let i = 0; i < workers.length; i++) {
-	workers[i].postMessage({commandName: 'takeTurn', commandParams: armies});
+for (let i = 0; i < armyWorkersStorage.length; i++) {
+	armyWorkersStorage[i].postMessage({ commandName: 'takeTurn', commandParams: armies });
 }
+
+const createWorkers = async function createWorkers(battle) {
+
+};
+
+module.exports = {
+
+};

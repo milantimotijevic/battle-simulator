@@ -29,6 +29,6 @@ module.exports = async function startBattle(id) {
 	if (battle.status === 'PENDING') {
 		battle = await updateBattle(battle.id, { status: 'ONGOING' });
 	}
-	await startWorkers(battle.armies);
+	await startWorkers(battle.id);
 	return battle;
 };

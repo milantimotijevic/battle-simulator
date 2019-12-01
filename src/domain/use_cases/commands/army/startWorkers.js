@@ -1,8 +1,11 @@
+const fetchAllArmies = require('../../queries/army/fetchAllArmies');
+
 /**
- * Accepts an array of armies and starts workers for the armies that should be fighting (i.e. haven't been defeated)
+ * Starts workers for the armies that should be fighting (i.e. haven't been defeated)
  */
-module.exports = async function startWorkers(armies) {
-	// TODO check which workers are running and run them if needed
+module.exports = async function startWorkers(battleId) {
+	// make sure we are working with undefeated armies
+	const armies = await fetchAllArmies({ filter: { battle: battleId, defeated: false } });
 	armies.forEach((army) => {
 		console.log(`Starting worker for army ${army.name} / ${army.id}`);
 	});
