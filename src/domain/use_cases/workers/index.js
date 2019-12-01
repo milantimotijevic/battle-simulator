@@ -28,7 +28,7 @@ const armyWorkersStorage = [];
 const workers = [];
 for (let i = 0; i < armies.length; i++) {
 	const worker =
-		new Worker('./worker.js', { workerData: {thisArmy: armies[i], battleId: battle.id} });
+		new Worker('./worker.js', { workerData: {thisArmy: armies[i], battle} });
 	// worker.on('message', message => {
 	//    console.log(message);
 	// });

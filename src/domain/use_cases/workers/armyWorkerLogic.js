@@ -4,13 +4,15 @@ const fetchAllArmies = require('../queries/army/fetchAllArmies');
 const findOneArmy = require('../queries/army/findOneArmy');
 const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
+const announce = require('../commands/battle/announce');
+const format = require('../../../util/message-formatter');
 
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
  */
 let { thisArmy } = workerData;
-const { battleId } = workerData;
+const { battle } = workerData;
 let opponents;
 
 /**
@@ -39,7 +41,7 @@ const getLatestData = async function getLatestData() {
 		return;
 	}
 	opponents = await fetchAllArmies(
-		{ filters: { defeated: false, battle: battleId }, excludeId: thisArmy.id }
+		{ filters: { defeated: false, battle: battle.id }, excludeId: thisArmy.id }
 	);
 };
 
@@ -72,12 +74,12 @@ commands.takeTurn = async function takeTurn() {
 	}
 
 	const target = helpers.selectTarget(thisArmy.strategy, opponents);
-	let msg = `${thisArmy.name} targets ${target.name}`;
+	announce(`${format(thisArmy)} targets ${format(target)}`);
 
 	if (helpers.isSuccessfulHit(thisArmy.units)) {
 		const damage = helpers.calculateDamage();
 		console.log(`NOTE: --- Registering ${damage} damage to ${target.name} in DB...`);
-		registerDamage(target, damage);
+		registerDamage(battle, target, damage);
 		msg += ` and lands a successful hit, dealing ${damage} damage!`;
 	} else {
 		msg += ' but fails to land a hit!';

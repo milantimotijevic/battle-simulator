@@ -1,4 +1,5 @@
 const updateArmy = require('../../commands/army/updateArmy');
+const announce = require('../battle/announce');
 
 /**
  * Persists changes to an army's currentUnits count and marks it as defeated if needed
@@ -6,12 +7,12 @@ const updateArmy = require('../../commands/army/updateArmy');
  * We do not want to await this method, nor do we want to await anything called inside it
  * There's no time for that, we have a battle to win, for heck's sake!
  */
-module.exports = function registerDamage(army, value) {
+module.exports = function registerDamage(battle, army, value) {
 	const currentUnits = army.currentUnits - value;
 	const defeated = currentUnits < 1;
 
 	if (defeated) {
-		// TODO log defeat
+		announce(battle, `Army ${army.name} (${army.id}) has been defeated!`);
 	}
 
 	updateArmy(army.id, { currentUnits, defeated });
