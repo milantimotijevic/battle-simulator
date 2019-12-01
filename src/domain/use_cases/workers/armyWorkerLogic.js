@@ -2,6 +2,7 @@ const { parentPort, workerData } = require('worker_threads');
 const helpers = require('./helpers');
 const getBattleParticipants = require('../queries/battle/getBattleParticipants');
 const updateArmy = require('../commands/army/updateArmy');
+const findOneArmy = require('../queries/army/findOneArmy');
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
@@ -30,6 +31,7 @@ parentPort.on('message', (message) => {
  * Gets latest army data from DB
  */
 const getLatestData = async function getLatestData() {
+	thisArmy = await findOneArmy(thisArmy.id);
 	const armies = await getBattleParticipants(battleId);
 	opponents = [];
 	armies.forEach((army) => {
