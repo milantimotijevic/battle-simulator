@@ -1,20 +1,25 @@
 const { parentPort, workerData } = require('worker_threads');
 const helpers = require('./helpers');
 
-const id = workerData;
-let thisArmy;
-let opponents;
+/**
+ * Initialize this worker so it knows exactly which army/battle it is related to
+ */
+let { thisArmy } = workerData;
+const { battleId } = workerData;
 
 /**
- * Public methods available to be called from the main thread
+ * Public methods available for calling from main thread
  */
 const commands = {};
 
+/**
+ * Issues a publicly available command based on msg from main thread
+ */
 parentPort.on('message', (message) => {
 	try {
 		commands[message.commandName](message.commandParams);
 	} catch (err) {
-		console.log(`Failed to perform command ${message.commandName} for ${army.name}`);
+		console.log(`Failed to perform command ${message.commandName} for ${thisArmy.name}`);
 	}
 });
 
@@ -34,6 +39,9 @@ commands.takeTurn = async function takeTurn(armies) {
 	console.log(msg);
 };
 
-const updateArmies = function updateArmies() {
-
+/**
+ * Gets latest army data from DB
+ */
+const getLatestData = async function getLatestData() {
+	const armies = null;
 };

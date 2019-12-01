@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
-/**
- * Fetch all with a single (optional) exclusion ID
- */
-const fetchAll = function fetchAll(excludeId) {
-	return mongoose.models.Army.find({ id: { $ne: excludeId } });
+const fetchAll = function fetchAll() {
+	return mongoose.models.Army.find();
 };
 
 const findOne = function findOne(id) {
