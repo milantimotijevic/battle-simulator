@@ -28,33 +28,41 @@ parentPort.on('message', (message) => {
 
 /**
  * Gets latest army data from DB
+ * TODO handle defeat checking better
  */
 const getLatestData = async function getLatestData() {
 	thisArmy = await findOneArmy(thisArmy.id);
-	const armies = await fetchAllArmies();
-	opponents = [];
-	armies.forEach((army) => {
-		if (army.id === thisArmy.id) {
-			thisArmy = army;
-		} else {
-			opponents.push(army);
-		}
-	});
-
 	if (thisArmy.defeated) {
-		console.log(`${thisArmy.name} has been defeated`);
+		return;
+	}
+	opponents = await fetchAllArmies({ filters: { defeated: false }, excludeId: thisArmy.id });
+	opponents = [];
+};
 
+/**
+ * Check whether this army needs to reload and then get hacky with Promises!
+ */
+const reloadIfNeeded = async function reloadIfNeeded() {
+	const { reload } = thisArmy;
+	if (thisArmy.reload) {
+		await new Promise(resolve => setTimeout(resolve, helpers.getMilliseconds(reload)));
 	}
 };
 
 commands.takeTurn = async function takeTurn(armies) {
 	await getLatestData();
-	// TODO reload
-	await getLatestData();
-
 	if (thisArmy.defeated) {
-
+		return;
 	}
+
+	await reloadIfNeeded();
+
+	// Checking again because the army might have been defeated while reloading
+	await getLatestData();
+	if (thisArmy.defeated) {
+		return;
+	}
+
 	const target = helpers.selectTarget(armies);
 	let msg = `${thisArmy.name} targets ${target.name}`;
 
@@ -67,4 +75,6 @@ commands.takeTurn = async function takeTurn(armies) {
 	}
 
 	console.log(msg);
+	// remember to set reload
+	// remember to call takeTurn again
 };

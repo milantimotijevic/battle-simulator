@@ -12,8 +12,13 @@ const calculateDamage = function() {
 	return 5;
 }
 
+const getMilliseconds = function getMilliseconds(num) {
+	return (num % 1) * 1000;
+};
+
 module.exports = {
 	selectTarget,
 	isSuccessfulHit,
 	calculateDamage,
+	getMilliseconds,
 };
