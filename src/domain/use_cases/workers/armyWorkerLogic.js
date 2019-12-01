@@ -31,7 +31,7 @@ parentPort.on('message', (message) => {
 	try {
 		commands[message.commandName](message.commandParams);
 	} catch (err) {
-		console.log(`Failed to perform command ${message.commandName} for ${thisArmy.name}`);
+		console.log(`(Worker Thread) Failed to perform command ${message.commandName} for ${thisArmy.name}`);
 	}
 });
 
