@@ -18,7 +18,7 @@ module.exports = async function startBattle(id) {
 	}
 
 	if (battle.armies.length < 10) {
-		throw Boom.badRequest('A battle must contain at least 10 participating armies before starting');
+		throw Boom.badRequest(`The battle only has ${battle.armies.length} participating armies. It needs at least 10`);
 	}
 
 	/**
