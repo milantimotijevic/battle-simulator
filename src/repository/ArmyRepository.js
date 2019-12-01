@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-const fetchAll = function fetchAll(filters = {}) {
+const fetchAll = function fetchAll(options = {}) {
+	const { filters, excludeId } = options;
+
+	if (excludeId) {
+		filters.id = { $ne: excludeId };
+	}
 	return mongoose.models.Army.find(filters);
 };
 

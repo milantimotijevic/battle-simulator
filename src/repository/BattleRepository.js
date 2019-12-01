@@ -35,15 +35,6 @@ const getBattleLog = async function getBattleLog(id) {
 	return battle.log;
 };
 
-/**
- * @DEPRECATED - use fetchAllArmies, the models have now been denormalized to support this query
- * TODO make sure this isn't used anywhere and remove it
- */
-const getBattleParticipants = async function getBattleParticipants(id) {
-	const battle = await mongoose.models.Battle.findById(id, { armies: 1 }).populate('armies');
-	return battle.armies;
-};
-
 module.exports = {
 	fetchAll,
 	findOne,
@@ -52,5 +43,4 @@ module.exports = {
 	pushToArrayProperty,
 	updateBattle,
 	getBattleLog,
-	getBattleParticipants
 };
