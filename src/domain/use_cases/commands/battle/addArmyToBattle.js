@@ -2,6 +2,7 @@ const Boom = require('@hapi/boom');
 const BattleRepository = require('../../../../repository/BattleRepository');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const findOneArmy = require('../../queries/army/findOneArmy');
+const updateArmy = require('../army/updateArmy');
 
 /**
  * Adds an existing army to a PENDING battle
@@ -18,6 +19,6 @@ module.exports = async function addArmyToBattle(battleId, armyId) {
 	if (existingBattle) {
 		throw Boom.badRequest(`Army is already in battle ${existingBattle.name} / ${existingBattle.id}`);
 	}
-
+	await updateArmy(army.id, { battle: battle.id });
 	await BattleRepository.pushToArrayProperty(battle.id, 'armies', army.id);
 };

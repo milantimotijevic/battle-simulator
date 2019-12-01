@@ -6,6 +6,7 @@ const schema = new mongoose.Schema({
 	currentUnits: 'Number',
 	defeated: { type: 'Boolean', defaultValue: false },
 	reload: 'Number',
+	battle: { type: mongoose.Schema.Types.ObjectId, ref: 'Battle' },
 });
 
 schema.set('toJSON', {
