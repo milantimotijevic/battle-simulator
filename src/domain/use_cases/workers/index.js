@@ -30,6 +30,10 @@ const terminateWorkerByArmyId = function terminateWorkerByArmyId(armyId) {
 const createAndRunWorkers = function createWorkers(battle) {
 	battle.armies.forEach((army) => {
 		const worker = new Worker('./worker.js', { workerData: { thisArmy: army, battle } });
+		// There is only ever one type of message (to terminate worker)
+		worker.on('message', (armyIdMessage) => {
+			terminateWorkerByArmyId(armyIdMessage);
+		});
 
 		const existingWorker = findWorkerByArmyId(army.id);
 		const { defeated } = army;
@@ -43,7 +47,7 @@ const createAndRunWorkers = function createWorkers(battle) {
 	});
 
 	armyWorkersStorage.forEach((armyWorker) => {
-		armyWorker.postMessage({ commandName: 'takeTurn' });
+		armyWorker.postMessage('takeTurn');
 	});
 };
 

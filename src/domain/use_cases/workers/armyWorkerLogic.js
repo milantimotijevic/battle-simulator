@@ -6,7 +6,6 @@ const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 let announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
-const terminateWorkerByArmyId = require('./index');
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
@@ -51,7 +50,7 @@ const reloadIfNeeded = async function reloadIfNeeded() {
 const takeTurn = async function takeTurn() {
 	await getLatestData();
 	if (thisArmy.defeated) {
-		terminateWorkerByArmyId(thisArmy.id);
+		parentPort.postMessage(thisArmy.id);
 		return;
 	}
 
@@ -60,7 +59,7 @@ const takeTurn = async function takeTurn() {
 	// Checking again because the army might have been defeated while reloading
 	await getLatestData();
 	if (thisArmy.defeated) {
-		terminateWorkerByArmyId(thisArmy.id);
+		parentPort.postMessage(thisArmy.id);
 		return;
 	}
 
@@ -68,6 +67,9 @@ const takeTurn = async function takeTurn() {
 	await attemptToAttack();
 };
 
+/**
+ * There is only ever one message and it's to takeTurn()
+ */
 parentPort.on('message', () => {
 	takeTurn();
 });
