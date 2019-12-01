@@ -26,10 +26,18 @@ const updateMultipleArmies = function updateMultipleArmies(ids, params) {
 		.updateMany({ _id: { $in: ids } }, { $set: params }, { useFindAndModify: false });
 };
 
+/**
+ * Increments an army's specified value by a specified amount
+ */
+const incrementValue = function incrementValue(_id, prop, value) {
+	return mongoose.models.Army.updateOne({ _id }, { $inc: { [prop]: value } }, { new: true });
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
 	createArmy,
 	updateArmy,
 	updateMultipleArmies,
+	incrementValue,
 };
