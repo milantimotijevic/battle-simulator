@@ -3,6 +3,8 @@ const helpers = require('./helpers');
 const fetchAllArmies = require('../queries/army/fetchAllArmies');
 const findOneArmy = require('../queries/army/findOneArmy');
 const updateArmy = require('../commands/army/updateArmy');
+const registerDamage = require('../commands/army/registerDamage');
+
 
 /**
  * Initialize this worker so it knows exactly which army/battle it is related to
@@ -51,6 +53,10 @@ const reloadIfNeeded = async function reloadIfNeeded() {
 	}
 };
 
+/**
+ * Instructs the army to check its status and reload/attack if needed
+ * TODO clean this up, it's getting bloated
+ */
 commands.takeTurn = async function takeTurn() {
 	await getLatestData();
 	if (thisArmy.defeated) {
@@ -71,6 +77,7 @@ commands.takeTurn = async function takeTurn() {
 	if (helpers.isSuccessfulHit(thisArmy.units)) {
 		const damage = helpers.calculateDamage();
 		console.log(`NOTE: --- Registering ${damage} damage to ${target.name} in DB...`);
+		registerDamage(target, damage);
 		msg += ` and lands a successful hit, dealing ${damage} damage!`;
 	} else {
 		msg += ' but fails to land a hit!';
