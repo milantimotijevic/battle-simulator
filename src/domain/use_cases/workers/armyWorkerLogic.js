@@ -4,7 +4,7 @@ const fetchAllArmies = require('../queries/army/fetchAllArmies');
 const findOneArmy = require('../queries/army/findOneArmy');
 const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
-const announce = require('../commands/battle/announce');
+let announce = require('../commands/battle/announce');
 const format = require('../../../util/message-formatter');
 
 
@@ -13,6 +13,10 @@ const format = require('../../../util/message-formatter');
  */
 let { thisArmy } = workerData;
 const { battle } = workerData;
+
+// It makes it easier to call announce without needing to pass the exact same battle every single time
+announce = announce.bind(this, battle);
+
 let opponents;
 
 /**
@@ -51,7 +55,10 @@ const getLatestData = async function getLatestData() {
 const reloadIfNeeded = async function reloadIfNeeded() {
 	const { reload } = thisArmy;
 	if (thisArmy.reload) {
+		announce(`${format(thisArmy)} begins to reload (${thisArmy.reload} sec.)`);
 		await new Promise(resolve => setTimeout(resolve, helpers.getMilliseconds(reload)));
+		await updateArmy(thisArmy.id, { reload: 0 });
+		announce(`${format(thisArmy)} finishes reloading`);
 	}
 };
 
@@ -78,14 +85,12 @@ commands.takeTurn = async function takeTurn() {
 
 	if (helpers.isSuccessfulHit(thisArmy.units)) {
 		const damage = helpers.calculateDamage();
-		console.log(`NOTE: --- Registering ${damage} damage to ${target.name} in DB...`);
+		announce(`${format(thisArmy)} lands a successful hit on ${format(target)} for ${damage} damage`);
 		registerDamage(battle, target, damage);
-		msg += ` and lands a successful hit, dealing ${damage} damage!`;
 	} else {
-		msg += ' but fails to land a hit!';
+		announce(`${format(thisArmy)} fails to hit ${format(target)}`);
 	}
 
-	console.log(msg);
 	const reload = helpers.calculateReload(thisArmy.currentUnits);
 	await updateArmy(thisArmy.id, { reload });
 
