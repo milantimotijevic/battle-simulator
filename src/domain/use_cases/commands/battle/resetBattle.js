@@ -23,7 +23,7 @@ module.exports = async function resetBattle(battleId) {
 
 	/**
      * Apparently, self-referencing is not possible in mongoose's updateMany method
-	 * Idea for improvement: find a better way to reset armies, one that does not include looping over them
+	 * TODO find a better way to reset armies, one that does not include looping over them
      */
 	// await ArmyRepository
 	// 	.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
