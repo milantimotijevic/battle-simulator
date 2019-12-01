@@ -1,11 +1,8 @@
 const BattleRepository = require('../../../../repository/BattleRepository');
 
 /**
- * Fetches a single battle, populates its 'armies' property, then returns only that one property
- * Allows filtering for undefeated-only armies
- * TODO rework the models so battle references are stored in armies, as well as
- * the vice-versa. That way, you can more easily filter for undefeated armies, without needing to do so in
- * app memory
+ * @DEPRECATED - use fetchAllArmies, the models have now been denormalized to support this query
+ * TODO make sure this isn't used anywhere and remove it
  */
 module.exports = async function getBattleParticipants(id, filters = {}) {
 	let participants = await BattleRepository.getBattleParticipants(id);

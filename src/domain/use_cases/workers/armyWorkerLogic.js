@@ -1,6 +1,5 @@
 const { parentPort, workerData } = require('worker_threads');
 const helpers = require('./helpers');
-const getBattleParticipants = require('../queries/battle/getBattleParticipants');
 const updateArmy = require('../commands/army/updateArmy');
 const findOneArmy = require('../queries/army/findOneArmy');
 
@@ -32,7 +31,7 @@ parentPort.on('message', (message) => {
  */
 const getLatestData = async function getLatestData() {
 	thisArmy = await findOneArmy(thisArmy.id);
-	const armies = await getBattleParticipants(battleId);
+	const armies = []; // TODO
 	opponents = [];
 	armies.forEach((army) => {
 		if (army.id === thisArmy.id) {

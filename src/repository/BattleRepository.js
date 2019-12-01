@@ -36,7 +36,8 @@ const getBattleLog = async function getBattleLog(id) {
 };
 
 /**
- * Fetches armies associated with a specific battle
+ * @DEPRECATED - use fetchAllArmies, the models have now been denormalized to support this query
+ * TODO make sure this isn't used anywhere and remove it
  */
 const getBattleParticipants = async function getBattleParticipants(id) {
 	const battle = await mongoose.models.Battle.findById(id, { armies: 1 }).populate('armies');

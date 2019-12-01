@@ -1,5 +1,5 @@
 const ArmyRepository = require('../../../../repository/ArmyRepository');
 
-module.exports = function fetchAllArmies() {
-	return ArmyRepository.fetchAll();
+module.exports = function fetchAllArmies(filters) {
+	return ArmyRepository.fetchAll(filters);
 };

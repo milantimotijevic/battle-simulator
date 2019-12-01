@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const fetchAll = function fetchAll() {
-	return mongoose.models.Army.find();
+const fetchAll = function fetchAll(filters = {}) {
+	return mongoose.models.Army.find(filters);
 };
 
 const findOne = function findOne(id) {
