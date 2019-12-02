@@ -28,6 +28,15 @@ function ArmyWorker(army, battle) {
 		this.opponents = await fetchAllArmies({
 			onlyUndefeated: true, battle: this.battle.id, excludeId: this.army.id,
 		});
+
+		/**
+		 * Check if there are no opponents left and set the forceStop flag
+		 * Another method will have already announced battle end, we just want to make sure this particular
+		 * worker does not start its reload sequence after the victor has been called
+		 */
+		if (this.opponents.length === 0) {
+			this.stop = true;
+		}
 	};
 
 	/**
@@ -39,7 +48,6 @@ function ArmyWorker(army, battle) {
 			this.announce(`${format(this.army)} begins to reload (${this.army.reload} sec.)`);
 			await new Promise(resolve => setTimeout(resolve, helpers.getMilliseconds(reload)));
 			await updateArmy(this.army.id, { reload: 0 });
-			this.announce(`${format(this.army)} finishes reloading`);
 		}
 	};
 
@@ -87,13 +95,6 @@ function ArmyWorker(army, battle) {
 		await updateArmy(this.army.id, { reload });
 
 		await this.takeTurn();
-	};
-
-	/**
-	 * Signals the worker that it should cease its routine, regardless of defeated status
-	 */
-	this.forceStop = () => {
-		this.stop = true;
 	};
 }
 
