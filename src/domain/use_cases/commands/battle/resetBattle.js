@@ -2,7 +2,7 @@ const Boom = require('@hapi/boom');
 const updateBattle = require('./updateBattle');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const updateArmy = require('../army/updateArmy');
-const { terminateWorkers } = require('../../workers');
+const { terminateWorkers } = require('../../workers/workerHandler');
 
 /**
  * Resets an ONGOING battle by

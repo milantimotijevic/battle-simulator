@@ -1,5 +1,5 @@
 const fetchAllArmies = require('../../queries/army/fetchAllArmies');
-const { createAndRunWorkers } = require('../../workers');
+const { createAndRunWorkers } = require('../../workers/workerHandler');
 
 /**
  * Starts workers for the armies that should be fighting (i.e. haven't been defeated)
