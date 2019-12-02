@@ -54,7 +54,8 @@ const createAndRunWorkers = function createAndRunWorkers(battle, startType) {
 			if (!worker) {
 				worker = instantiateWorker(army, battle);
 			} else {
-				// the worker is already running or is defeated, we don't want to touch it
+				// the worker is already running or is defeated; we want to tell it to ignore outside-called takeTurn()
+				worker.skipInitial = true;
 				return;
 			}
 		}
@@ -63,7 +64,7 @@ const createAndRunWorkers = function createAndRunWorkers(battle, startType) {
 	});
 
 	armyWorkersStorage.forEach((armyWorker) => {
-		armyWorker.takeTurn();
+		armyWorker.takeTurn(true);
 	});
 };
 

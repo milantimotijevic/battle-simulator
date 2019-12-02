@@ -66,8 +66,14 @@ function ArmyWorker(army, battle) {
 
 	/**
 	 * Instructs the army to check its status, reload if needed and initiate the attack sequence
+	 * isInitial refers to takeTurn() being called from the outside
 	 */
-	this.takeTurn = async () => {
+	this.takeTurn = async (isInitial) => {
+		if (isInitial && this.skipInitial) {
+			// this means someone is spamming the start button
+			return;
+		}
+
 		await this.getLatestData();
 		if (this.army.defeated || this.stop) {
 			return;
