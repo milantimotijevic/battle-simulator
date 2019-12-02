@@ -20,7 +20,7 @@ function findWorkerByArmyId(armyId) {
  * Disallows the creation of multiple workers for a single army
  * This method expects to receive a battle with undefeated-only armies, however, it will confirm army's status as well
  */
-const createAndRunWorkers = function createWorkers(battle) {
+const createAndRunWorkers = function createAndRunWorkers(battle) {
 	battle.armies.forEach((army) => {
 		// no need to pass around the entire battle object, those 3 properties will do
 		const worker = new ArmyWorker(army, {
