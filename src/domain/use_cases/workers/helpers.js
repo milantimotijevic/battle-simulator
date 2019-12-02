@@ -17,7 +17,7 @@ const isSuccessfulHit = function isSuccessfulHit(currentUnits) {
 };
 
 const calculateDamage = function calculateDamage(currentUnits) {
-	return Math.floor(currentUnits * 0.5);
+	return Math.floor(currentUnits) * 0.5;
 };
 
 const calculateReload = function calculateReload(currentUnits) {
