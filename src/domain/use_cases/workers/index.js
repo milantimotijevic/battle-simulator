@@ -40,6 +40,17 @@ const createAndRunWorkers = function createWorkers(battle) {
 	});
 };
 
+/**
+ * Issues the forceStop command to each armyWorker for the relevant battle
+ */
+const terminateWorkers = function terminateWorkers(battle) {
+	battle.armies.forEach((army) => {
+		const worker = findWorkerByArmyId(army.id);
+		worker.forceStop();
+	});
+};
+
 module.exports = {
 	createAndRunWorkers,
+	terminateWorkers,
 };
