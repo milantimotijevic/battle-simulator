@@ -13,11 +13,11 @@ const selectTarget = function selectTarget(strategy, opponents) {
 
 const isSuccessfulHit = function isSuccessfulHit(currentUnits) {
 	const roll = Math.floor(Math.random() * 100) + 1;
-	return roll <= currentUnits;
+	return roll <= currentUnits * process.env.HIT_PER_UNIT;
 };
 
 const calculateDamage = function calculateDamage(currentUnits) {
-	return Math.floor(currentUnits) * 0.5;
+	return Math.floor(currentUnits * process.env.DAMAGE_PER_UNIT);
 };
 
 const calculateReload = function calculateReload(currentUnits) {
