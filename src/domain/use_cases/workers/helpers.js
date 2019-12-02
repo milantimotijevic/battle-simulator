@@ -1,30 +1,6 @@
-function merge(left, right) {
-	const arr = [];
-
-	while (left.length && right.length) {
-		if (left[0].currentUnits < right[0].currentUnits) {
-			arr.push(left.shift());
-		} else {
-			arr.push(right.shift());
-		}
-	}
-	return arr.concat(left.slice().concat(right.slice()));
-}
-
-function mergeSort(arr) {
-	if (arr.length < 2) {
-		return arr;
-	}
-
-	const middle = Math.floor(arr.length / 2);
-	const left = arr.slice(0, middle);
-	const right = arr.slice(middle);
-
-	return merge(mergeSort(left), mergeSort(right));
-}
-
 /**
  * Chooses a target to attack based on the attack strategy
+ * The array will have already been sorted (through mongoose query)
  */
 const selectTarget = function selectTarget(strategy, opponents) {
 	if (strategy === 'RANDOM') {
@@ -32,8 +8,7 @@ const selectTarget = function selectTarget(strategy, opponents) {
 		return opponents[randomIndex];
 	}
 
-	const sortedOpponents = mergeSort(opponents.slice());
-	return strategy === 'WEAKEST' ? sortedOpponents[0] : sortedOpponents[sortedOpponents.length - 1];
+	return strategy === 'WEAKEST' ? opponents[0] : opponents[opponents.length - 1];
 };
 
 const isSuccessfulHit = function isSuccessfulHit(currentUnits) {

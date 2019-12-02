@@ -8,9 +8,5 @@ module.exports = async function startWorkers(battle) {
 	// ensure we are working with undefeated armies only
 	battle.armies = await fetchAllArmies({ filter: { battle: battle.id, defeated: false } });
 
-	try {
-		createAndRunWorkers(battle);
-	} catch (err) {
-		console.log(err)
-	}
+	createAndRunWorkers(battle);
 };

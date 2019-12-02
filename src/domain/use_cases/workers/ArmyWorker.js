@@ -6,9 +6,9 @@ const registerDamage = require('../commands/army/registerDamage');
 const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
 
-function ArmyWorker(army, battleName) {
+function ArmyWorker(army, battle) {
 	this.army = army;
-	this.battle = { id: this.army.battle, name: battleName };
+	this.battle = battle;
 
 	// It makes it easier to call announce without needing to pass the exact same battle every single time
 	this.announce = announce.bind(this, this.battle);
@@ -23,7 +23,11 @@ function ArmyWorker(army, battleName) {
 			return;
 		}
 		this.opponents = await fetchAllArmies(
-			{ filters: { defeated: false, battle: this.battle.id }, excludeId: this.army.id }
+			{
+				filters: { defeated: false, battle: this.battle.id },
+				excludeId: this.army.id,
+				sort: 'currentUnits',
+			}
 		);
 	};
 
@@ -47,7 +51,6 @@ function ArmyWorker(army, battleName) {
 	this.takeTurn = async () => {
 		await this.getLatestData();
 		if (this.army.defeated) {
-			// TODO handle killing
 			return;
 		}
 
@@ -56,7 +59,6 @@ function ArmyWorker(army, battleName) {
 		// Checking again because the army might have been defeated while reloading
 		await this.getLatestData();
 		if (this.army.defeated) {
-			// TODO handle killing
 			return;
 		}
 
