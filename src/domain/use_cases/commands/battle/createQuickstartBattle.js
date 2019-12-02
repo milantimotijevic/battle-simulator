@@ -11,6 +11,8 @@ const battleData = require('../../../../../bootstrap-data/battle');
 const armiesData = require('../../../../../bootstrap-data/armies');
 /**
  * Creates a sample battle out of bootstrap data
+ * We are OK with ignoring a couple of ESlint rules because we want this operation to be performed using
+ * these exact methods (.forEach does not work so well with async/await)
  */
 module.exports = async function createQuickstartBattle() {
 	const battle = await createBattle(battleData);
