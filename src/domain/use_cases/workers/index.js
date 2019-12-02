@@ -17,6 +17,7 @@ function findWorkerByArmyId(armyId) {
 
 /**
  * Creates and runs workers (calls their relevant method that will keep them looping over actions)
+ * Disallows the creation of multiple workers for a single army
  * This method expects to receive a battle with undefeated-only armies, however, it will confirm army's status as well
  */
 const createAndRunWorkers = function createWorkers(battle) {

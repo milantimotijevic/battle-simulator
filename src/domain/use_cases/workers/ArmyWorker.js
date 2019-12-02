@@ -9,6 +9,8 @@ const { format } = require('./helpers');
 function ArmyWorker(army, battleName) {
 	this.army = army;
 	this.battle = { id: this.army.battle, name: battleName };
+	// this flag is used for force-stopping a worker (e.g. when a battle is reset)
+	this.stop = false;
 
 	// It makes it easier to call announce without needing to pass the exact same battle every single time
 	this.announce = announce.bind(this, this.battle);
@@ -44,7 +46,7 @@ function ArmyWorker(army, battleName) {
 	 */
 	this.takeTurn = async () => {
 		await this.getLatestData();
-		if (this.army.defeated) {
+		if (this.army.defeated || this.stop) {
 			return;
 		}
 
@@ -52,7 +54,7 @@ function ArmyWorker(army, battleName) {
 
 		// Checking again because the army might have been defeated while reloading
 		await this.getLatestData();
-		if (this.army.defeated) {
+		if (this.army.defeated || this.stop) {
 			return;
 		}
 
@@ -78,6 +80,13 @@ function ArmyWorker(army, battleName) {
 		await updateArmy(this.army.id, { reload });
 
 		await this.takeTurn();
+	};
+
+	/**
+	 * Signals the worker that it should cease its routine, regardless of defeated status
+	 */
+	this.forceStop = () => {
+		this.stop = true;
 	};
 }
 
