@@ -5,7 +5,6 @@ const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
-const checkLastStanding = require('../queries/army/checkLastStanding');
 
 function ArmyWorker(army, battle) {
 	this.army = army;
@@ -77,10 +76,6 @@ function ArmyWorker(army, battle) {
 	 */
 	this.attemptToAttack = async () => {
 		const target = helpers.selectTarget(this.army.strategy, this.opponents);
-		if (!target) {
-			await checkLastStanding(this.battle);
-			return;
-		}
 		this.announce(`${format(this.army)} targets ${format(target)}`);
 
 		if (helpers.isSuccessfulHit(this.army.currentUnits)) {

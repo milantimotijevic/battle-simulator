@@ -10,7 +10,7 @@ module.exports = async function registerDamage(battle, army, value) {
 	const defeated = currentUnits < 1;
 
 	if (defeated) {
-		announce(battle, `Army ${army.name} (${army.id}) has been defeated!`);
+		announce(battle, `${army.name} (${army.id}) has been defeated!`);
 		await updateArmy(army.id, { currentUnits, defeated });
 		checkLastStanding(battle);
 	} else {
