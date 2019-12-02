@@ -21,7 +21,7 @@ const calculateDamage = function calculateDamage(currentUnits) {
 };
 
 const calculateReload = function calculateReload(currentUnits) {
-	return 0.01 * currentUnits;
+	return process.env.RELOAD_PER_UNIT * currentUnits;
 };
 
 const getMilliseconds = function getMilliseconds(num) {
