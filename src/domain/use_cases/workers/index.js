@@ -22,7 +22,12 @@ function findWorkerByArmyId(armyId) {
  */
 const createAndRunWorkers = function createWorkers(battle) {
 	battle.armies.forEach((army) => {
-		const worker = new ArmyWorker(army, battle.name);
+		// no need to pass around the entire battle object, those 3 properties will do
+		const worker = new ArmyWorker(army, {
+			id: battle.id,
+			name: battle.name,
+			armies: battle.armies,
+		});
 
 		const existingWorker = findWorkerByArmyId(army.id);
 		const { defeated } = army;

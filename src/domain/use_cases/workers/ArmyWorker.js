@@ -7,9 +7,9 @@ const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
 const checkLastStanding = require('../queries/army/checkLastStanding');
 
-function ArmyWorker(army, battleName) {
+function ArmyWorker(army, battle) {
 	this.army = army;
-	this.battle = { id: this.army.battle, name: battleName };
+	this.battle = battle;
 	// this flag is used for force-stopping a worker (e.g. when a battle is reset)
 	this.stop = false;
 
