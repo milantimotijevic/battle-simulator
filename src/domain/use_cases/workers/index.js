@@ -8,20 +8,12 @@
  */
 const ArmyWorker = require('./ArmyWorker');
 
-let armyWorkersStorage = [];
+const armyWorkersStorage = [];
 
 
 function findWorkerByArmyId(armyId) {
 	return armyWorkersStorage.find(worker => worker.army.id === armyId);
 }
-
-/**
- * Disposes of the worker
- */
-const terminateWorkerByArmyId = function terminateWorkerByArmyId(armyId) {
-	const worker = findWorkerByArmyId(armyId);
-	armyWorkersStorage = armyWorkersStorage.filter(item => item === worker);
-};
 
 /**
  * Creates and runs workers (calls their relevant method that will keep them looping over actions)
@@ -49,5 +41,4 @@ const createAndRunWorkers = function createWorkers(battle) {
 
 module.exports = {
 	createAndRunWorkers,
-	terminateWorkerByArmyId,
 };
