@@ -5,6 +5,7 @@ const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
+const getBattleStatus = require('../queries/battle/getBattleStatus');
 
 function ArmyWorker(army, battle) {
 	this.army = army;
@@ -20,6 +21,17 @@ function ArmyWorker(army, battle) {
 	 * Gets latest army data from DB
 	 */
 	this.getLatestData = async () => {
+		const battleStatus = await getBattleStatus(this.battle.id);
+		/**
+		 * Check if the battle status has been changed in the meantime
+		 * If so, we want this worker to terminate its routine
+		 * Another method will already have announced battle end and/or this army's defeat
+		 */
+		if (battleStatus !== 'ONGOING') {
+			this.stop = true;
+			return;
+		}
+
 		this.army = await findOneArmy(this.army.id);
 		if (this.army.defeated) {
 			return;
@@ -32,6 +44,7 @@ function ArmyWorker(army, battle) {
 		 * Check if there are no opponents left and set the forceStop flag
 		 * Another method will have already announced battle end, we just want to make sure this particular
 		 * worker does not start its reload sequence after the victor has been called
+		 * Keeping this check in addition to the above one because this one is somewhat more precise
 		 */
 		if (this.opponents.length === 0) {
 			this.stop = true;

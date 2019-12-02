@@ -35,6 +35,11 @@ const getBattleLog = async function getBattleLog(id) {
 	return battle.log;
 };
 
+const getBattleStatus = async function getBattleStatus(id) {
+	const battle = await mongoose.models.Battle.findById(id, { status: 1 });
+	return battle.status;
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
@@ -43,4 +48,5 @@ module.exports = {
 	pushToArrayProperty,
 	updateBattle,
 	getBattleLog,
+	getBattleStatus,
 };
