@@ -3,6 +3,7 @@ const updateBattle = require('./updateBattle');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const startWorkers = require('../army/startWorkers');
 const announce = require('./announce');
+const getOngoingBattles = require('../../queries/battle/getOngoingBattles');
 
 /**
  * Starts a battle in PENDING status by:
@@ -14,8 +15,15 @@ const announce = require('./announce');
  */
 module.exports = async function startBattle(id) {
 	let battle = await findOneBattle(id);
+
 	if (battle.status === 'RESOLVED') {
 		throw Boom.badRequest('This battle has already ended');
+	}
+
+	const ongoingBattles = await getOngoingBattles();
+
+	if (ongoingBattles.length >= 5) {
+		throw Boom.badRequest('There are already 5 ongoing battles');
 	}
 
 	if (battle.armies.length < 10) {

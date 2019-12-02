@@ -40,6 +40,14 @@ const getBattleStatus = async function getBattleStatus(id) {
 	return battle.status;
 };
 
+/**
+ * Returns battles in ONGOING status
+ * We only need a few properties here (projections)
+ */
+const getOngoingBattles = function getOngoingBattles() {
+	return mongoose.models.Battle.find({ status: 'ONGOING' }, { name: 1, id: 1, _id: 0 });
+};
+
 module.exports = {
 	fetchAll,
 	findOne,
@@ -49,4 +57,5 @@ module.exports = {
 	updateBattle,
 	getBattleLog,
 	getBattleStatus,
+	getOngoingBattles,
 };
