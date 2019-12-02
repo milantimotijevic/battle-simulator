@@ -7,7 +7,7 @@ const announce = require('../battle/announce');
  * We do not want to await this method, nor do we want to await anything called inside it
  * There's no time for that, we have a battle to win, for heck's sake!
  */
-module.exports = function registerDamage(battle, army, value) {
+module.exports = async function registerDamage(battle, army, value) {
 	const currentUnits = army.currentUnits - value;
 	const defeated = currentUnits < 1;
 
@@ -15,5 +15,5 @@ module.exports = function registerDamage(battle, army, value) {
 		announce(battle, `Army ${army.name} (${army.id}) has been defeated!`);
 	}
 
-	updateArmy(army.id, { currentUnits, defeated });
+	await updateArmy(army.id, { currentUnits, defeated });
 };
