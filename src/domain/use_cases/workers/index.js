@@ -21,7 +21,7 @@ function findWorkerByArmyId(armyId) {
  */
 const createAndRunWorkers = function createWorkers(battle) {
 	battle.armies.forEach((army) => {
-		const worker = new ArmyWorker(army, battle);
+		const worker = new ArmyWorker(army, battle.name);
 
 		const existingWorker = findWorkerByArmyId(army.id);
 		const { defeated } = army;
@@ -31,11 +31,11 @@ const createAndRunWorkers = function createWorkers(battle) {
 			return;
 		}
 
-		armyWorkersStorage.push({ worker, armyId: army.id });
+		armyWorkersStorage.push(worker);
 	});
 
 	armyWorkersStorage.forEach((armyWorker) => {
-		armyWorker.worker.takeTurn();
+		armyWorker.takeTurn();
 	});
 };
 

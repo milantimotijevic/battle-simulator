@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
 
+/**
+ * Fetch all and always sort (ASC) by currentUnits
+ * No need to parametrize the latter, we always want them sorted like that
+ */
 const fetchAll = function fetchAll(options = {}) {
-	const { filters, excludeId, sort } = options;
+	const { filters, excludeId } = options;
 
 	if (excludeId) {
 		filters.id = { $ne: excludeId };
 	}
-	return mongoose.models.Army.find(filters, {}, { sort });
+
+	return mongoose.models.Army.find(filters, {}, { sort: 'currentUnits' });
 };
 
 const findOne = function findOne(id) {
@@ -23,7 +28,7 @@ const updateArmy = function updateArmy(_id, params) {
 
 const updateMultipleArmies = function updateMultipleArmies(ids, params) {
 	return mongoose.models.Army
-		.updateMany({ _id: { $in: ids } }, { $set: params }, { useFindAndModify: false });
+		.updateMany({ _id: { $in: ids } }, { $set: params });
 };
 
 /**

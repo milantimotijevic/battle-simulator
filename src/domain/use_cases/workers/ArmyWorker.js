@@ -6,9 +6,9 @@ const registerDamage = require('../commands/army/registerDamage');
 const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
 
-function ArmyWorker(army, battle) {
+function ArmyWorker(army, battleName) {
 	this.army = army;
-	this.battle = battle;
+	this.battle = { id: this.army.battle, name: battleName };
 
 	// It makes it easier to call announce without needing to pass the exact same battle every single time
 	this.announce = announce.bind(this, this.battle);
@@ -18,7 +18,7 @@ function ArmyWorker(army, battle) {
 	 * Gets latest army data from DB
 	 */
 	this.getLatestData = async () => {
-		this.army = await findOneArmy(this.id);
+		this.army = await findOneArmy(this.army.id);
 		if (this.army.defeated) {
 			return;
 		}
@@ -26,7 +26,6 @@ function ArmyWorker(army, battle) {
 			{
 				filters: { defeated: false, battle: this.battle.id },
 				excludeId: this.army.id,
-				sort: 'currentUnits',
 			}
 		);
 	};

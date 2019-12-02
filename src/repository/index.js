@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+mongoose.set('useFindAndModify', false);
+
 console.log('Initiating connection with MongoDB');
 /**
  * Initiates connection with MongoDB and immediately loads models
