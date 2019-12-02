@@ -71,6 +71,15 @@ const routes = [
 			},
 		},
 	},
+	{
+		method: 'POST',
+		path: '/battle/quickstart',
+		handler: controller.createQuickstartBattleHandler,
+		options: {
+			description: 'Creates a quickstart battle',
+			tags: ['api'],
+		},
+	},
 ];
 
 module.exports = routes;

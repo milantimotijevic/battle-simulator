@@ -24,7 +24,9 @@ function ArmyWorker(army, battleName) {
 		if (this.army.defeated) {
 			return;
 		}
-		this.opponents = await fetchAllArmies({ onlyUndefeated: true, battle: this.battle.id });
+		this.opponents = await fetchAllArmies({
+			onlyUndefeated: true, battle: this.battle.id, excludeId: this.army.id,
+		});
 	};
 
 	/**

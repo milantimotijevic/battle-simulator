@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Rohan",
+    "units": 88,
+    "strategy": "WEAKEST"
+  },
+  {
+    "name": "Gondor",
+    "units": 95,
+    "strategy": "WEAKEST"
+  },
+  {
+    "name": "Melkorians",
+    "units": 100,
+    "strategy": "RANDOM"
+  },
+  {
+    "name": "Lamonians",
+    "units": 81,
+    "strategy": "STRONGEST"
+  },
+  {
+    "name": "Uruk Hai",
+    "units": 93,
+    "strategy": "STRONGEST"
+  },
+  {
+    "name": "Orcs",
+    "units": 95,
+    "strategy": "RANDOM"
+  },
+  {
+    "name": "Elves of Rivendell",
+    "units": 80,
+    "strategy": "WEAKEST"
+  },
+  {
+    "name": "Elves of Lothlorien",
+    "units": 97,
+    "strategy": "RANDOM"
+  },
+  {
+    "name": "Dwarves",
+    "units": 99,
+    "strategy": "STRONGEST"
+  },
+  {
+    "name": "Gundabad Orcs",
+    "units": 91,
+    "strategy": "WEAKEST"
+  }
+]

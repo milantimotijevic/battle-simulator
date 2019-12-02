@@ -4,6 +4,7 @@ const createBattle = require('../../../domain/use_cases/commands/battle/createBa
 const startBattle = require('../../../domain/use_cases/commands/battle/startBattle');
 const resetBattle = require('../../../domain/use_cases/commands/battle/resetBattle');
 const getBattleLog = require('../../../domain/use_cases/queries/battle/getBattleLog');
+const createQuickstartBattle = require('../../../domain/use_cases/commands/battle/createQuickstartBattle');
 
 const fetchAllBattlesHandler = async function fetchAllBattlesHandler() {
 	return fetchAllBattles();
@@ -34,6 +35,10 @@ const getBattleLogHandler = async function getBattleLogHandler(request) {
 	return getBattleLog(id);
 };
 
+const createQuickstartBattleHandler = async function createQuickstartBattleHandler() {
+	return createQuickstartBattle();
+};
+
 module.exports = {
 	fetchAllBattlesHandler,
 	findOneBattleHandler,
@@ -41,4 +46,5 @@ module.exports = {
 	startBattleHandler,
 	resetBattleHandler,
 	getBattleLogHandler,
+	createQuickstartBattleHandler,
 };
