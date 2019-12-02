@@ -18,7 +18,7 @@ const fetchAll = function fetchAll(options = {}) {
 	}
 
 	if (excludeId) {
-		query.id = { $ne: excludeId };
+		query._id = { $ne: excludeId };
 	}
 
 	return mongoose.models.Army.find(query, {}, { sort: 'currentUnits' });

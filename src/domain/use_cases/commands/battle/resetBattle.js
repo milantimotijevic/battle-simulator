@@ -1,8 +1,8 @@
 const Boom = require('@hapi/boom');
 const updateBattle = require('./updateBattle');
-const stopWorkers = require('./../army/stopWorkers');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const updateArmy = require('../army/updateArmy');
+const { terminateWorkers } = require('../../workers');
 
 /**
  * Resets an ONGOING battle by
@@ -19,7 +19,7 @@ module.exports = async function resetBattle(battleId) {
 	if (battle.status !== 'ONGOING') {
 		throw Boom.badRequest(`Battle is in status ${battle.status}. Only ONGOING battles can be reset`);
 	}
-	await stopWorkers(battle.armies);
+	terminateWorkers(battle.armies);
 
 	/**
      * Apparently, self-referencing is not possible in mongoose's updateMany method

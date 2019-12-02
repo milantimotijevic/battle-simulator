@@ -50,6 +50,7 @@ const terminateWorkers = function terminateWorkers(battle) {
 	});
 };
 
+
 module.exports = {
 	createAndRunWorkers,
 	terminateWorkers,
