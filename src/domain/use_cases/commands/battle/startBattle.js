@@ -45,7 +45,8 @@ module.exports = async function startBattle(id) {
 		await announce(battle, 'BATTLE NOW STARTING...');
 	} else {
 		startType = 'RESUMED';
-		await announce(battle, 'BATTLE HAS BEEN RESUMED');
+		await announce(battle,
+			'RESUME COMMAND HAS BEEN ISSUED. We will not duplicate the workers, do not worry!');
 	}
 
 	battle = await updateBattle(battle.id, { status: 'ONGOING', recentlyReset: false });
