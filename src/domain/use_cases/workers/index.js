@@ -15,26 +15,48 @@ function findWorkerByArmyId(armyId) {
 	return armyWorkersStorage.find(worker => worker.army.id === armyId);
 }
 
+const instantiateWorker = function instantiateWorker(army, battle) {
+	return new ArmyWorker(army, {
+		id: battle.id,
+		name: battle.name,
+		armies: battle.armies,
+	});
+};
+
 /**
  * Creates and runs workers (calls their relevant method that will keep them looping over actions)
  * Disallows the creation of multiple workers for a single army
  * This method expects to receive a battle with undefeated-only armies, however, it will confirm army's status as well
+ * startType tells us the circumstances under which the workers are starting (FRESH, POST_RESET, RESUMED)
  */
-const createAndRunWorkers = function createAndRunWorkers(battle) {
+const createAndRunWorkers = function createAndRunWorkers(battle, startType) {
 	battle.armies.forEach((army) => {
-		// no need to pass around the entire battle object, those 3 properties will do
-		const worker = new ArmyWorker(army, {
-			id: battle.id,
-			name: battle.name,
-			armies: battle.armies,
-		});
-
-		const existingWorker = findWorkerByArmyId(army.id);
 		const { defeated } = army;
-
-		if (existingWorker || defeated) {
-			// This army either already has an active worker, or it has been defeated
+		if (defeated) {
 			return;
+		}
+
+		let worker;
+		if (startType === 'FRESH') {
+			worker = instantiateWorker(army, battle);
+		} else if (startType === 'POST_RESET') {
+			worker = findWorkerByArmyId(army.id);
+			if (!worker) {
+				// the battle was reset at some point and so was the application, the worker is not in the array
+				worker = instantiateWorker(army, battle);
+			} else {
+				// the worker is already in the array, no need to add it, but we do want to un-block it
+				worker.stop = false;
+				return;
+			}
+		} else if (startType === 'RESUMED') {
+			worker = findWorkerByArmyId(army.id);
+			if (!worker) {
+				worker = instantiateWorker(army, battle);
+			} else {
+				// the worker is already running or is defeated, we don't want to touch it
+				return;
+			}
 		}
 
 		armyWorkersStorage.push(worker);

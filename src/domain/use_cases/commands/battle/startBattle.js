@@ -31,17 +31,25 @@ module.exports = async function startBattle(id) {
 	}
 
 	/**
-     * It is possible for a battle to have started before, but to have had its workers stopped due to application
-     * stopping/crashing
-     * In this case, we do not need to update its status
-     */
+	 * A battle can be started due to:
+	 * 1. A fresh start,
+	 * 2. A resumed start (someone had killed the app), or
+	 * 3. A post-reset start
+	 * This info is useful when handling the workers
+	 */
+	let startType;
+	const { recentlyReset } = battle;
+
 	if (battle.status === 'PENDING') {
+		startType = recentlyReset ? 'POST_RESET' : 'FRESH';
 		await announce(battle, 'BATTLE NOW STARTING...');
-		battle = await updateBattle(battle.id, { status: 'ONGOING' });
 	} else {
+		startType = 'RESUMED';
 		await announce(battle, 'BATTLE HAS BEEN RESUMED');
 	}
 
-	startWorkers(battle);
+	battle = await updateBattle(battle.id, { status: 'ONGOING', recentlyReset: false });
+
+	startWorkers(battle, startType);
 	return battle;
 };

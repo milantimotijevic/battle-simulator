@@ -27,7 +27,7 @@ module.exports = async function resetBattle(battleId) {
 	// await ArmyRepository
 	// 	.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
 
-	battle = await updateBattle(battle.id, { logs: [], status: 'PENDING' });
+	battle = await updateBattle(battle.id, { logs: [], status: 'PENDING', recentlyReset: true });
 	announce(battle, 'THE BATTLE HAS BEEN RESET. ROLLING BACK...');
 
 	battle.armies.forEach(async (army) => {
