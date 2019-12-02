@@ -1,7 +1,5 @@
 const fetchAllArmies = require('./fetchAllArmies');
-const announce = require('../../commands/battle/announce');
-const { format } = require('../../workers/helpers');
-const updateBattle = require('../../commands/battle/updateBattle');
+const endBattle = require('../../commands/battle/endBattle');
 
 /**
  * Checks whether a specific battle has only one undefeated army left
@@ -12,8 +10,6 @@ module.exports = async function checkLastStanding(battle) {
 	});
 
 	if (undefeatedArmies.length === 1) {
-		const victor = undefeatedArmies[0];
-		announce(battle, `${format(victor)} IS VICTORIOUS!!!`);
-		await updateBattle(battle.id, { status: 'RESOLVED', victor });
+		endBattle(battle, undefeatedArmies[0]);
 	}
 };

@@ -2,6 +2,7 @@ const Boom = require('@hapi/boom');
 const updateBattle = require('./updateBattle');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const startWorkers = require('../army/startWorkers');
+const announce = require('./announce');
 
 /**
  * Starts a battle in PENDING status by:
@@ -27,8 +28,12 @@ module.exports = async function startBattle(id) {
      * In this case, we do not need to update its status
      */
 	if (battle.status === 'PENDING') {
+		await announce(battle, 'BATTLE NOW STARTING...');
 		battle = await updateBattle(battle.id, { status: 'ONGOING' });
+	} else {
+		await announce(battle, 'BATTLE HAS BEEN RESUMED');
 	}
+
 	startWorkers(battle);
 	return battle;
 };
