@@ -2,6 +2,7 @@ const Boom = require('@hapi/boom');
 const updateBattle = require('./updateBattle');
 const findOneBattle = require('../../queries/battle/findOneBattle');
 const updateArmy = require('../army/updateArmy');
+const announce = require('./announce');
 
 /**
  * Resets an ONGOING battle by
@@ -14,7 +15,7 @@ const updateArmy = require('../army/updateArmy');
  * method after it does its thing
  */
 module.exports = async function resetBattle(battleId) {
-	const battle = await findOneBattle(battleId);
+	let battle = await findOneBattle(battleId);
 	if (battle.status !== 'ONGOING') {
 		throw Boom.badRequest(`Battle is in status ${battle.status}. Only ONGOING battles can be reset`);
 	}
@@ -25,8 +26,12 @@ module.exports = async function resetBattle(battleId) {
      */
 	// await ArmyRepository
 	// 	.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
+
+	battle = await updateBattle(battle.id, { logs: [], status: 'PENDING' });
+	announce(battle, 'THE BATTLE HAS BEEN RESET. ROLLING BACK...');
+
 	battle.armies.forEach(async (army) => {
 		await updateArmy(army.id, { currentUnits: army.units, defeated: false, reload: 0 });
 	});
-	return updateBattle(battle.id, { logs: [], status: 'PENDING' });
+	return battle;
 };
