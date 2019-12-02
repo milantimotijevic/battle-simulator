@@ -2,7 +2,7 @@ const ArmyRepository = require('../../../../repository/ArmyRepository');
 
 /**
  * Fetches all armies with possible filtering options:
- * options = { filter: {}, excludeId: 'String' }
+ * options = { onlyUndefeated: Boolean, battle: String, excludeId: String }
  * Deliberately separating ID exclusion from the rest of the filters to avoid having business logic
  * meddle with mongoose syntax ('$ne', etc.)
  */

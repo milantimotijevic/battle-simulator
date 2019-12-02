@@ -22,12 +22,7 @@ function ArmyWorker(army, battleName) {
 		if (this.army.defeated) {
 			return;
 		}
-		this.opponents = await fetchAllArmies(
-			{
-				filters: { defeated: false, battle: this.battle.id },
-				excludeId: this.army.id,
-			}
-		);
+		this.opponents = await fetchAllArmies({ onlyUndefeated: true, battle: this.battle.id });
 	};
 
 	/**
@@ -36,10 +31,10 @@ function ArmyWorker(army, battleName) {
 	this.reloadIfNeeded = async () => {
 		const { reload } = this.army;
 		if (this.army.reload) {
-			announce(`${format(this.army)} begins to reload (${this.army.reload} sec.)`);
+			this.announce(`${format(this.army)} begins to reload (${this.army.reload} sec.)`);
 			await new Promise(resolve => setTimeout(resolve, helpers.getMilliseconds(reload)));
 			await updateArmy(this.army.id, { reload: 0 });
-			announce(`${format(this.army)} finishes reloading`);
+			this.announce(`${format(this.army)} finishes reloading`);
 		}
 	};
 
@@ -69,14 +64,14 @@ function ArmyWorker(army, battleName) {
 	 */
 	this.attemptToAttack = async () => {
 		const target = helpers.selectTarget(this.army.strategy, this.opponents);
-		announce(`${format(this.army)} targets ${format(target)}`);
+		this.announce(`${format(this.army)} targets ${format(target)}`);
 
 		if (helpers.isSuccessfulHit(this.army.currentUnits)) {
 			const damage = helpers.calculateDamage(this.army.currentUnits);
-			announce(`${format(this.army)} lands a successful hit on ${format(target)} for ${damage} damage`);
+			this.announce(`${format(this.army)} lands a successful hit on ${format(target)} for ${damage} damage`);
 			registerDamage(this.battle, target, damage);
 		} else {
-			announce(`${format(this.army)} fails to hit ${format(target)}`);
+			this.announce(`${format(this.army)} fails to hit ${format(target)}`);
 		}
 
 		const reload = helpers.calculateReload(this.army.currentUnits);

@@ -6,7 +6,7 @@ const { createAndRunWorkers } = require('../../workers');
  */
 module.exports = async function startWorkers(battle) {
 	// ensure we are working with undefeated armies only
-	battle.armies = await fetchAllArmies({ filter: { battle: battle.id, defeated: false } });
+	battle.armies = await fetchAllArmies({ onlyUndefeated: true, battle: battle.id });
 
 	createAndRunWorkers(battle);
 };
