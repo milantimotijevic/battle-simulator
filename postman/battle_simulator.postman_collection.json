@@ -1,0 +1,302 @@
+{
+	"info": {
+		"_postman_id": "04f0e588-6c25-42dc-aa91-d97185db329a",
+		"name": "battle_simulator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fetch Battles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Battle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e61d355-3266-475c-90b2-6425d5c91083",
+						"exec": [
+							"postman.setEnvironmentVariable(\"battle_id\", JSON.parse(responseBody).id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Mordor\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/battle",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Battle",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle/{{battle_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle",
+						"{{battle_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Army",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dce628b3-dc14-4c31-a630-738b9704cab0",
+						"exec": [
+							"postman.setEnvironmentVariable(\"army_id\", JSON.parse(responseBody).id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Weirdos\",\n\t\"units\": 100,\n\t\"strategy\": \"STRONGEST\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/army",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"army"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Army",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/army/{{army_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"army",
+						"{{army_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join Battle",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/army/battle/{{army_id}}/{{battle_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"army",
+						"battle",
+						"{{army_id}}",
+						"{{battle_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Battle Log",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle/{{battle_id}}/log",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle",
+						"{{battle_id}}",
+						"log"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Battle",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle/{{battle_id}}/reset",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle",
+						"{{battle_id}}",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Battle",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle/{{battle_id}}/start",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle",
+						"{{battle_id}}",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch All Armies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/army",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"army"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Quickstart Battle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "40262836-3a8a-45c1-9161-12b843d841a3",
+						"exec": [
+							"postman.setEnvironmentVariable(\"battle_id\", JSON.parse(responseBody).id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/battle/quickstart",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"battle",
+						"quickstart"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
