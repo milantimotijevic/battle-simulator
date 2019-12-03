@@ -36,8 +36,10 @@ const createAndRunWorkers = function createAndRunWorkers(battle, /* startType */
 		if (!existingWorker && !army.defeated) {
 			const worker = instantiateWorker(army, battle);
 			storage[army.id] = worker;
-			console.log(`Instructing worker for army ${format(army)} to start...`);
+			console.log(`Initiating worker for army ${format(army)} to start...`);
 			worker.takeTurn();
+		} else {
+			console.log(`Refusing to initiate worker for army ${format(army)}. Worker already running`);
 		}
 	});
 };
