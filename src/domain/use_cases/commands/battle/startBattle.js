@@ -54,7 +54,7 @@ module.exports = async function startBattle(id) {
 
 	/**
 	 * Sometimes reset battles end up storing a few residual entries in battle log just after the reset command
-	 * This is because announce method never gets awaited (to avoid incurring unnecessary delay)
+	 * This is because announce method rarely gets awaited (to avoid incurring unnecessary delay)
 	 * We want to ensure that the log gets completely cleared if a battle is starting after a reset
 	 */
 	if (startType === POST_RESET) {

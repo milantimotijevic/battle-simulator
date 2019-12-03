@@ -39,7 +39,8 @@ const createAndRunWorkers = function createAndRunWorkers(battle, /* startType */
 			console.log(`Initiating worker for army ${format(army)}...`);
 			worker.takeTurn();
 		} else {
-			console.log(`Refusing to initiate worker for army ${format(army)}. Worker already running`);
+			const reason = `REASON: ${existingWorker ? 'already running' : 'army defeated'}`;
+			console.log(`Refusing to initiate worker for army ${format(army)}. ${reason}`);
 		}
 	});
 };
