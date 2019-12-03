@@ -31,13 +31,18 @@ function ArmyWorker(army, battle, storage) {
 		 * If so, we want this worker to terminate its routine
 		 * Another method will already have announced battle end and/or this army's defeat
 		 */
-		if (battleStatus !== 'ONGOING') {
+		if (!battleStatus || battleStatus !== 'ONGOING') {
 			return this.terminate();
 		}
 
-		this.army = await findOneArmy(this.army.id);
+		try {
+			this.army = await findOneArmy(this.army.id);
+		} catch (err) {
+			console.log(`DB CORRUPTION DETECTED!!! Terminating worker for army ${format(army)}...`);
+			return this.terminate();
+		}
 
-		if (this.army.defeated) {
+		if (!this.army || this.army.defeated) {
 			return this.terminate();
 		}
 
