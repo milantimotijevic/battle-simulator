@@ -12,9 +12,9 @@ log will also be preserved in the database.
 
 Each army will select its target based on its own attack
 strategy, which is specified upon army's creation. The damage
-and likelihood of their attacks will depend on their unit
-count. Each attack, whether it was successful or not, will
-incur a short reload-timer. The latter also depends on
+and likelihood of their attacks landing will depend on their
+unit count. Each attack, whether it was successful or not,
+will incur a short reload timer. The latter also depends on
 the army's unit count.
 
 FEATURES:
@@ -49,7 +49,7 @@ on endpoints in {root}/src/api/routes/{army/battle}/index.
 
 Input validation - Faulty data sent through the endpoints
 will be rejected with a suitable error message, informing
-the user which parameters are wrong.
+the user which parameters were wrong.
 
 
 PRE-REQUISITES:
@@ -60,7 +60,7 @@ TECHNOLOGY STACK:
 1. hapi.js - REST framework,
 2. joi - input validation library,
 3. Boom - error handling library,
-4. Mongoose - for communication with MongoDB.
+4. Mongoose - ODM for MongoDB.
 
 DEPLOYMENT:
 1. Provide DB access -
@@ -69,7 +69,7 @@ Inside you will a parameter called DATABASE_CONNECTION_STRING.
 Give it a valid MongoDB connection string.
 2. Install dependencies -
 Run 'npm install' inside project's root.
-3. Start the applicationi -
+3. Start the application -
 Run 'npm start' inside project's root.
 
 BASIC INSTRUCTIONS:
@@ -78,7 +78,7 @@ Refer to {root}/src/api/routes/{army/battle}/index files,
 or the Postman collection/environment for details.
 
 A battle needs to be created using the POST /battle endpoint.
-You will then need to create least 10 armies (this can be
+You will then need to create at least 10 armies (this can be
 parametrized in the .env file) using the POST /army endpoint.
 
 An army is added into a battle using the
