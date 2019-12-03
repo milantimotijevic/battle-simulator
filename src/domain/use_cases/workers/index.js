@@ -7,19 +7,13 @@
  * a new worker)
  */
 const ArmyWorker = require('./ArmyWorker');
+const { format } = require('./helpers');
 
 const storage = {};
 
 
 function findWorkerByArmyId(armyId) {
 	return storage[armyId];
-}
-
-/**
- * Checks whether there's at least one worker relevant to this battle inside the storage
- */
-function findWorkerByBattleId(battleId) {
-	return storage.find(worker => worker.battle.id === battleId);
 }
 
 const instantiateWorker = function instantiateWorker(army, battle) {
@@ -36,44 +30,15 @@ const instantiateWorker = function instantiateWorker(army, battle) {
  * This method expects to receive a battle with undefeated-only armies, however, it will confirm army's status as well
  * startType tells us the circumstances under which the workers are starting (FRESH, POST_RESET, RESUMED)
  */
-const createAndRunWorkers = function createAndRunWorkers(battle, startType) {
+const createAndRunWorkers = function createAndRunWorkers(battle, /* startType */) {
 	battle.armies.forEach((army) => {
-		const { defeated } = army;
-		if (defeated) {
-			return;
+		const existingWorker = findWorkerByArmyId(army.id);
+		if (!existingWorker && !army.defeated) {
+			const worker = instantiateWorker(army, battle);
+			storage[army.id] = worker;
+			console.log(`Instructing worker for army ${format(army)} to start...`);
+			worker.takeTurn();
 		}
-
-		let worker;
-		if (startType === 'FRESH') {
-			worker = instantiateWorker(army, battle);
-		} else if (startType === 'POST_RESET') {
-			worker = findWorkerByArmyId(army.id);
-			if (!worker) {
-				// the battle was reset at some point and so was the application, the worker is not in the array
-				worker = instantiateWorker(army, battle);
-			} else {
-				// the worker is already in the array, no need to add it, but we do want to un-block it
-				worker.stop = false;
-				return;
-			}
-		} else if (startType === 'RESUMED') {
-			worker = findWorkerByArmyId(army.id);
-			if (!worker) {
-				worker = instantiateWorker(army, battle);
-			} else {
-				console.log('forcing skip initial')
-				// the worker is already running or is defeated; we want to tell it to ignore outside-called takeTurn()
-				worker.skipInitial = true;
-				return;
-			}
-		}
-
-		storage[army.id] = worker;
-	});
-
-	const keys = Object.keys(storage);
-	keys.forEach((key) => {
-		storage[key].takeTurn(true);
 	});
 };
 
