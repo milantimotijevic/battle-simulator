@@ -4,7 +4,7 @@ const findOneArmy = require('../queries/army/findOneArmy');
 const updateArmy = require('../commands/army/updateArmy');
 const registerDamage = require('../commands/army/registerDamage');
 const announce = require('../commands/battle/announce');
-const { format } = require('./helpers');
+const { format, warnDBCorruption } = require('./helpers');
 const getBattleStatus = require('../queries/battle/getBattleStatus');
 
 function ArmyWorker(army, battle, storage) {
@@ -25,7 +25,13 @@ function ArmyWorker(army, battle, storage) {
 
 	// eslint-disable-next-line consistent-return
 	this.getLatestData = async () => {
-		const battleStatus = await getBattleStatus(this.battle.id);
+		let battleStatus;
+		try {
+			battleStatus = await getBattleStatus(this.battle.id);
+		} catch (err) {
+			warnDBCorruption(this.army);
+			return this.terminate();
+		}
 		/**
 		 * Check if the battle status has been changed in the meantime
 		 * If so, we want this worker to terminate its routine
@@ -38,7 +44,7 @@ function ArmyWorker(army, battle, storage) {
 		try {
 			this.army = await findOneArmy(this.army.id);
 		} catch (err) {
-			console.log(`DB CORRUPTION DETECTED!!! Terminating worker for army ${format(army)}...`);
+			warnDBCorruption(this.army);
 			return this.terminate();
 		}
 

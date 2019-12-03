@@ -35,6 +35,13 @@ const format = function format(entity) {
 	return `${entity.name} (${entity.id})`;
 };
 
+/**
+ * Logs a formatted message related to database corruption
+ */
+const warnDBCorruption = function warnDBCorruption(army) {
+	console.log(`DB CORRUPTION DETECTED!!! Terminating worker for army ${format(army)}...`);
+};
+
 module.exports = {
 	selectTarget,
 	isSuccessfulHit,
@@ -42,4 +49,5 @@ module.exports = {
 	calculateReload,
 	getMilliseconds,
 	format,
+	warnDBCorruption,
 };
