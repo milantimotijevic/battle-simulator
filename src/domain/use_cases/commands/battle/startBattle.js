@@ -5,6 +5,10 @@ const startWorkers = require('../army/startWorkers');
 const announce = require('./announce');
 const getOngoingBattles = require('../../queries/battle/getOngoingBattles');
 
+const FRESH = 'FRESH';
+const POST_RESET = 'POST_RESET';
+const RESUMED = 'RESUMED';
+
 /**
  * Starts a battle in PENDING status by:
  * 1. Changing battle status (if needed),
@@ -41,15 +45,30 @@ module.exports = async function startBattle(id) {
 	const { recentlyReset } = battle;
 
 	if (battle.status === 'PENDING') {
-		startType = recentlyReset ? 'POST_RESET' : 'FRESH';
+		startType = recentlyReset ? POST_RESET : FRESH;
+	} else {
+		startType = RESUMED;
+	}
+
+	const updatePayload = { status: 'ONGOING', recentlyReset: false };
+
+	/**
+	 * Sometimes reset battles end up storing a few residual entries in battle log just after the reset command
+	 * This is because announce method never gets awaited (to avoid incurring unnecessary delay)
+	 * We want to ensure that the log gets completely cleared if a battle is starting after a reset
+	 */
+	if (startType === POST_RESET) {
+		updatePayload.log = [];
+	}
+
+	battle = await updateBattle(battle.id, updatePayload);
+
+	if (startType === POST_RESET || startType === FRESH) {
 		await announce(battle, 'BATTLE NOW STARTING...');
 	} else {
-		startType = 'RESUMED';
 		await announce(battle,
 			'RESUME COMMAND HAS BEEN ISSUED. We will not duplicate the workers, do not worry!');
 	}
-
-	battle = await updateBattle(battle.id, { status: 'ONGOING', recentlyReset: false });
 
 	startWorkers(battle, startType);
 	return battle;
