@@ -96,3 +96,14 @@ automatically create a battle with 10 hardcoded armies.
 
 There is a limit to how many battles can run at the same time
 and this can be changed in the .env file.
+
+FRIENDLY ADVICE
+
+Unless you want to spend 15 minutes of your life watching
+three armies spam-miss each other, do not start a battle
+where all armies have identical unit count and all of
+them have either 'STRONGEST' or 'WEAKEST' strategy. Doing so
+will cause them to quickly chunk away at the first few
+armies' units in left-to-right fashion, until there are only
+a few armies left with 1-3 units each, which means their
+hit chance will be horrendous.
