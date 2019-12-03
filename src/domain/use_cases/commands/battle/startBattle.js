@@ -26,12 +26,14 @@ module.exports = async function startBattle(id) {
 
 	const ongoingBattles = await getOngoingBattles();
 
-	if (ongoingBattles.length >= 5) {
-		throw Boom.badRequest('There are already 5 ongoing battles');
+	if (ongoingBattles.length >= process.env.MAX_BATTLES) {
+		throw Boom.badRequest(`There are already ${process.env.MAX_BATTLES} (maximum) ongoing battles`);
 	}
 
-	if (battle.armies.length < 10) {
-		throw Boom.badRequest(`The battle only has ${battle.armies.length} participating armies. It needs at least 10`);
+	if (battle.armies.length < process.env.MIN_ARMIES) {
+		throw Boom.badRequest(
+			`The battle only has ${battle.armies.length} participating armies. It needs at least ${process.env.MIN_ARMIES}`
+		);
 	}
 
 	/**
