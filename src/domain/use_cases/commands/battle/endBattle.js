@@ -1,5 +1,5 @@
 const announce = require('../../commands/battle/announce');
-const { format } = require('../../workers/helpers');
+const { format } = require('../../../workers/helpers');
 const updateBattle = require('../../commands/battle/updateBattle');
 
 /**

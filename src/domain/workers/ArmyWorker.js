@@ -1,11 +1,11 @@
 const helpers = require('./helpers');
-const fetchAllArmies = require('../queries/army/fetchAllArmies');
-const findOneArmy = require('../queries/army/findOneArmy');
-const updateArmy = require('../commands/army/updateArmy');
-const registerDamage = require('../commands/army/registerDamage');
-const announce = require('../commands/battle/announce');
+const fetchAllArmies = require('../use_cases/queries/army/fetchAllArmies');
+const findOneArmy = require('../use_cases/queries/army/findOneArmy');
+const updateArmy = require('../use_cases/commands/army/updateArmy');
+const registerDamage = require('../use_cases/commands/army/registerDamage');
+const announce = require('../use_cases/commands/battle/announce');
 const { format, warnDBCorruption } = require('./helpers');
-const getBattleStatus = require('../queries/battle/getBattleStatus');
+const getBattleStatus = require('../use_cases/queries/battle/getBattleStatus');
 
 function ArmyWorker(army, battle, storage) {
 	this.army = army;
