@@ -6,6 +6,9 @@ const { format } = require('../../../use_cases/workers/helpers');
  */
 module.exports = async function announce(battle, messageBody) {
 	const message = `BATTLE INFO - ${format(battle)}: ${messageBody}`;
-	console.log(message);
+	if (process.env.BATTLE_LOGGING === 'SHOW') {
+		console.log(message);
+	}
+
 	await BattleRepository.pushToArrayProperty(battle.id, 'log', message);
 };
