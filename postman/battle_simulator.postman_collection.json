@@ -52,7 +52,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Mordor\"\n}"
+					"raw": "{\n\t\"name\": \"War of the Ancients\"\n}"
 				},
 				"url": {
 					"raw": "{{host}}/battle",
@@ -114,7 +114,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Weirdos\",\n\t\"units\": 100,\n\t\"strategy\": \"STRONGEST\"\n}"
+					"raw": "{\n\t\"name\": \"Night Elves\",\n\t\"units\": 100,\n\t\"strategy\": \"RANDOM\"\n}"
 				},
 				"url": {
 					"raw": "{{host}}/army",
