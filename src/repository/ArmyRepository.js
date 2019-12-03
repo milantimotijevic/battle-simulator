@@ -18,6 +18,7 @@ const fetchAll = function fetchAll(options = {}) {
 	}
 
 	if (excludeId) {
+		// eslint-disable-next-line no-underscore-dangle
 		query._id = { $ne: excludeId };
 	}
 
