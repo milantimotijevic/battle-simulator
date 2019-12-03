@@ -55,9 +55,9 @@ module.exports = async function startBattle(id) {
 	const updatePayload = { status: 'ONGOING', recentlyReset: false };
 
 	/**
-	 * Sometimes reset battles end up storing a few residual entries in battle log just after the reset command
-	 * This is because announce method rarely gets awaited (to avoid incurring unnecessary delay)
-	 * We want to ensure that the log gets completely cleared if a battle is starting after a reset
+	 * A reset battle will store information on its being reset in the log, as well as (potentially) a few other
+	 * lines. The latter is because announce method rarely gets awaited (to avoid incurring unnecessary delay)
+	 * However, since we are now performing a fresh start, we want to purge all other information
 	 */
 	if (startType === POST_RESET) {
 		updatePayload.log = [];

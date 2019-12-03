@@ -27,8 +27,14 @@ module.exports = async function resetBattle(battleId) {
 	// await ArmyRepository
 	// 	.updateMultipleArmies(battle.armies, { currentUnits: '$units', defeated: false, reload: 0 });
 
+	/**
+	 * The requirements did not specifically state anything about battle logs upon reset, however, I assumed we did NOT
+	 * want to preserve them. We will, however, temporarily store information that the battle has been reset, with
+	 * a small chance of a few other lines slipping inside the log as well.
+	 * Starting this game later on will cause the log to be fully reset.
+	 */
 	battle = await updateBattle(battle.id, { log: [], status: 'PENDING', recentlyReset: true });
-	announce(battle, 'THE BATTLE HAS BEEN RESET. ROLLING BACK...', { skipDB: true });
+	announce(battle, 'THE BATTLE HAS BEEN RESET. ROLLING BACK...');
 
 	battle.armies.forEach(async (army) => {
 		await updateArmy(army.id, { currentUnits: army.units, defeated: false, reload: 0 });
