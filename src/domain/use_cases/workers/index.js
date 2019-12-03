@@ -8,11 +8,18 @@
  */
 const ArmyWorker = require('./ArmyWorker');
 
-const armyWorkersStorage = [];
+const storage = {};
 
 
 function findWorkerByArmyId(armyId) {
-	return armyWorkersStorage.find(worker => worker.army.id === armyId);
+	return storage[armyId];
+}
+
+/**
+ * Checks whether there's at least one worker relevant to this battle inside the storage
+ */
+function findWorkerByBattleId(battleId) {
+	return storage.find(worker => worker.battle.id === battleId);
 }
 
 const instantiateWorker = function instantiateWorker(army, battle) {
@@ -20,7 +27,7 @@ const instantiateWorker = function instantiateWorker(army, battle) {
 		id: battle.id,
 		name: battle.name,
 		armies: battle.armies,
-	});
+	}, storage);
 };
 
 /**
@@ -54,17 +61,19 @@ const createAndRunWorkers = function createAndRunWorkers(battle, startType) {
 			if (!worker) {
 				worker = instantiateWorker(army, battle);
 			} else {
+				console.log('forcing skip initial')
 				// the worker is already running or is defeated; we want to tell it to ignore outside-called takeTurn()
 				worker.skipInitial = true;
 				return;
 			}
 		}
 
-		armyWorkersStorage.push(worker);
+		storage[army.id] = worker;
 	});
 
-	armyWorkersStorage.forEach((armyWorker) => {
-		armyWorker.takeTurn(true);
+	const keys = Object.keys(storage);
+	keys.forEach((key) => {
+		storage[key].takeTurn(true);
 	});
 };
 

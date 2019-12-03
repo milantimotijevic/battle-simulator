@@ -7,11 +7,13 @@ const announce = require('../commands/battle/announce');
 const { format } = require('./helpers');
 const getBattleStatus = require('../queries/battle/getBattleStatus');
 
-function ArmyWorker(army, battle) {
+function ArmyWorker(army, battle, storage) {
 	this.army = army;
 	this.battle = battle;
 	// this flag is used for force-stopping a worker (e.g. when a battle is reset)
 	this.stop = false;
+	// store a reference to the memory container, so we can easily purge it when killing the worker
+	this.storage = storage;
 
 	// It makes it easier to call announce without needing to pass the exact same battle every single time
 	this.announce = announce.bind(this, this.battle);
@@ -20,6 +22,8 @@ function ArmyWorker(army, battle) {
 	/**
 	 * Gets latest army data from DB
 	 */
+
+	// eslint-disable-next-line consistent-return
 	this.getLatestData = async () => {
 		const battleStatus = await getBattleStatus(this.battle.id);
 		/**
@@ -28,14 +32,15 @@ function ArmyWorker(army, battle) {
 		 * Another method will already have announced battle end and/or this army's defeat
 		 */
 		if (battleStatus !== 'ONGOING') {
-			this.stop = true;
-			return;
+			return this.terminate();
 		}
 
 		this.army = await findOneArmy(this.army.id);
+
 		if (this.army.defeated) {
-			return;
+			return this.terminate();
 		}
+
 		this.opponents = await fetchAllArmies({
 			onlyUndefeated: true, battle: this.battle.id, excludeId: this.army.id,
 		});
@@ -47,7 +52,7 @@ function ArmyWorker(army, battle) {
 		 * Keeping this check in addition to the above one because this one is somewhat more precise
 		 */
 		if (this.opponents.length === 0) {
-			this.stop = true;
+			this.terminate();
 		}
 	};
 
@@ -66,24 +71,17 @@ function ArmyWorker(army, battle) {
 
 	/**
 	 * Instructs the army to check its status, reload if needed and initiate the attack sequence
-	 * isInitial refers to takeTurn() being called from the outside
 	 */
-	this.takeTurn = async (isInitial) => {
-		if (isInitial && this.skipInitial) {
-			// this means someone is spamming the start button
-			return;
-		}
-
+	this.takeTurn = async () => {
 		await this.getLatestData();
-		if (this.army.defeated || this.stop) {
+		if (this.stop) {
 			return;
 		}
 
 		await this.reloadIfNeeded();
 
-		// Checking again because the army might have been defeated while reloading
 		await this.getLatestData();
-		if (this.army.defeated || this.stop) {
+		if (this.stop) {
 			return;
 		}
 
@@ -109,6 +107,16 @@ function ArmyWorker(army, battle) {
 		await updateArmy(this.army.id, { reload });
 
 		await this.takeTurn();
+	};
+
+	/**
+	 * Sets stop flag to true and ensures the worker is removed from the memory container
+	 * takeTurn method will periodically check whether this flag exists and stop execution if so
+	 * This is typically called when the army gets defeated, the game is reset, or the army is the sole survivor
+	 */
+	this.terminate = () => {
+		this.stop = true;
+		delete this.storage[this.army.id];
 	};
 }
 
